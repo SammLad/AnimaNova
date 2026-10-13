@@ -1,263 +1,241 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>WildCare | Cuidamos a los animales</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WildCare | Cuidamos a los animales</title>
 
-  <body>
-    <!-- HEADER / MENÚ PRINCIPAL -->
-    <header class="navbar-wildcare">
-      <div
-        class="container d-flex flex-wrap align-items-center justify-content-between py-3 gap-3"
-      >
-        <a
-          href="#inicio"
-          class="text-decoration-none text-dark d-flex align-items-center gap-2"
-        >
-          <div class="logo-flower"></div>
-          <span class="display-font brand-title">WildCare</span>
-        </a>
+  <!-- Hojas de estilos y Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./src/assets/styles/style.css" />
+</head>
 
-        <nav class="d-flex flex-wrap gap-3 align-items-center">
-          <a href="#inicio" class="text-decoration-none text-dark fw-bold">
-            Inicio
-          </a>
+<body>
+  <!-- HEADER / MENÚ PRINCIPAL -->
+  <header class="navbar-wildcare sticky-top bg-white shadow-sm">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between py-3 gap-3">
+      <a href="#inicio" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+        <div class="logo-flower"></div>
+        <span class="display-font brand-title fs-4 fw-bold">WildCare</span>
+      </a>
 
-          <a href="#donaciones" class="text-decoration-none text-dark fw-bold">
-            Donaciones
-          </a>
+      <nav class="d-flex flex-wrap gap-4 align-items-center">
+        <a href="#inicio" class="text-decoration-none text-dark fw-bold">Inicio</a>
+        <a href="#donaciones" class="text-decoration-none text-dark fw-bold">Donaciones</a>
+        <a href="#adopciones" class="text-decoration-none text-dark fw-bold">Adopciones</a>
+        <a href="#blog" class="text-decoration-none text-dark fw-bold">Blog del Cuidador</a>
+        <a href="Login.html" class="text-decoration-none text-dark fw-bold">Ingresar</a>
+      </nav>
+    </div>
+  </header>
 
-          <a href="#adopciones" class="text-decoration-none text-dark fw-bold">
-            Adopciones
-          </a>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container py-5">
 
-          <a href="#blog" class="text-decoration-none text-dark fw-bold">
-            Blog del Cuidador
-          </a>
-
-          <a href="Login.html" class="text-decoration-none text-dark fw-bold">
-            Ingresar
-          </a>
-        </nav>
+    <!-- INICIO -->
+    <section id="inicio" class="section-gap mb-5">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-12">
+          <div class="card-white p-4 p-md-5 shadow-sm rounded-4">
+            <h1 class="display-font text-success mb-3">
+              ¡Bienvenidos a WildCare!
+            </h1>
+            <p class="lead">
+              Somos una comunidad dedicada al cuidado, rescate y protección de los animales domésticos y salvajes.
+            </p>
+            <p class="mb-0">
+              Ayudamos a encontrar hogares responsables, promovemos las adopciones y compartimos información para
+              mejorar la vida animal.
+            </p>
+          </div>
+        </div>
       </div>
-    </header>
 
-    <main class="container py-5">
-      <!-- INICIO -->
-      <section id="inicio" class="section-gap">
-        <div class="row align-items-center g-4">
-          <div class="col-lg-12">
-            <div class="card-white p-4">
-              <h1 class="display-font text-success">
-                ¡Bienvenidos a WildCare!
-              </h1>
+      <div class="row g-4 mt-2">
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 text-center shadow-sm rounded-4">
+            <i class="bi bi-heart-fill text-danger fs-1"></i>
+            <h4 class="mt-3">Protección animal</h4>
+            <p class="text-muted mb-0">Promovemos el respeto y el cuidado de los animales.</p>
+          </div>
+        </div>
 
-              <p class="mt-3">
-                Somos una comunidad dedicada al cuidado, rescate y protección de
-                los animales domésticos y salvajes.
-              </p>
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 text-center shadow-sm rounded-4">
+            <i class="bi bi-house-heart-fill text-success fs-1"></i>
+            <h4 class="mt-3">Adopción responsable</h4>
+            <p class="text-muted mb-0">Ayudamos a los animales a encontrar una familia.</p>
+          </div>
+        </div>
 
-              <p>
-                Ayudamos a encontrar hogares responsables, promovemos las
-                adopciones y compartimos información para mejorar la vida
-                animal.
-              </p>
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 text-center shadow-sm rounded-4">
+            <i class="bi bi-gift-fill text-warning fs-1"></i>
+            <h4 class="mt-3">Ayuda solidaria</h4>
+            <p class="text-muted mb-0">Apoyamos a los refugios mediante donaciones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DONACIONES -->
+    <section id="donaciones" class="section-gap py-5">
+      <div class="text-center mb-5">
+        <h2 class="display-font text-success">
+          <i class="bi bi-heart-fill"></i> Donaciones
+        </h2>
+        <p class="text-muted">
+          Cada aporte ayuda a mejorar la vida de los animales.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card-white p-4 text-center h-100 d-flex flex-column shadow-sm rounded-4">
+            <i class="bi bi-bowl-food text-success fs-1"></i>
+            <h4 class="mt-3">Alimentación</h4>
+            <p class="text-muted">Contribuye con alimentos para los animales rescatados.</p>
+            <div class="mt-auto pt-3">
+              <h3 class="text-success mb-3">$10</h3>
+              <button class="btn btn-outline-success rounded-pill w-100 fw-bold">
+                Quiero ayudar
+              </button>
             </div>
           </div>
         </div>
 
-        <div class="row g-4 mt-4">
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 text-center">
-              <i class="bi bi-heart-fill text-danger fs-1"></i>
-              <h4 class="mt-3">Protección animal</h4>
-              <p>Promovemos el respeto y el cuidado de los animales.</p>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 text-center">
-              <i class="bi bi-house-heart-fill text-success fs-1"></i>
-              <h4 class="mt-3">Adopción responsable</h4>
-              <p>Ayudamos a los animales a encontrar una familia.</p>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 text-center">
-              <i class="bi bi-gift-fill text-warning fs-1"></i>
-              <h4 class="mt-3">Ayuda solidaria</h4>
-              <p>Apoyamos a los refugios mediante donaciones.</p>
+        <div class="col-md-4">
+          <div class="card-white p-4 text-center h-100 d-flex flex-column shadow-sm rounded-4">
+            <i class="bi bi-hospital text-danger fs-1"></i>
+            <h4 class="mt-3">Atención veterinaria</h4>
+            <p class="text-muted">Apoya los cuidados y tratamientos veterinarios.</p>
+            <div class="mt-auto pt-3">
+              <h3 class="text-success mb-3">$25</h3>
+              <button class="btn btn-outline-success rounded-pill w-100 fw-bold">
+                Quiero ayudar
+              </button>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- DONACIONES -->
-      <section id="donaciones" class="section-gap py-5">
-        <div class="text-center mb-4">
-          <h2 class="display-font text-success">
-            <i class="bi bi-heart-fill"></i> Donaciones
-          </h2>
-
-          <p class="text-muted">
-            Cada aporte ayuda a mejorar la vida de los animales.
-          </p>
-        </div>
-
-        <div class="row g-4">
-          <div class="col-md-4">
-            <!-- d-flex flex-column h-100 asegura que la tarjeta ocupe toda la altura -->
-            <div class="card-white p-4 text-center h-100 d-flex flex-column">
-              <i class="bi bi-bowl-food text-success fs-1"></i>
-              <h4 class="mt-3">Alimentación</h4>
-              <p>Contribuye con alimentos para los animales rescatados.</p>
-              <!-- mt-auto empuja el precio y el botón hacia abajo de forma uniforme -->
-              <div class="mt-auto">
-                <h3 class="text-success mb-3">$10</h3>
-                <button class="btn btn-outline-success rounded-pill w-100">
-                  Quiero ayudar
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 text-center h-100 d-flex flex-column">
-              <i class="bi bi-hospital text-danger fs-1"></i>
-              <h4 class="mt-3">Atención veterinaria</h4>
-              <p>Apoya los cuidados y tratamientos veterinarios.</p>
-              <div class="mt-auto">
-                <h3 class="text-success mb-3">$25</h3>
-                <button class="btn btn-outline-success rounded-pill w-100">
-                  Quiero ayudar
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 text-center h-100 d-flex flex-column">
-              <i class="bi bi-house-fill text-warning fs-1"></i>
-              <h4 class="mt-3">Refugios</h4>
-              <p>Ayuda a mejorar los espacios donde viven los animales.</p>
-              <div class="mt-auto">
-                <h3 class="text-success mb-3">$50</h3>
-                <button class="btn btn-outline-success rounded-pill w-100">
-                  Quiero ayudar
-                </button>
-              </div>
+        <div class="col-md-4">
+          <div class="card-white p-4 text-center h-100 d-flex flex-column shadow-sm rounded-4">
+            <i class="bi bi-house-fill text-warning fs-1"></i>
+            <h4 class="mt-3">Refugios</h4>
+            <p class="text-muted">Ayuda a mejorar los espacios donde viven los animales.</p>
+            <div class="mt-auto pt-3">
+              <h3 class="text-success mb-3">$50</h3>
+              <button class="btn btn-outline-success rounded-pill w-100 fw-bold">
+                Quiero ayudar
+              </button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ADOPCIONES -->
-      <section id="adopciones" class="section-gap py-5">
-        <div class="text-center mb-4">
-          <h2 class="display-font text-success">
-            <i class="bi bi-house-heart-fill"></i> Adopciones
-          </h2>
+    <!-- ADOPCIONES -->
+    <section id="adopciones" class="section-gap py-5">
+      <div class="text-center mb-5">
+        <h2 class="display-font text-success">
+          <i class="bi bi-house-heart-fill"></i> Adopciones
+        </h2>
+        <p class="text-muted">
+          Encuentra un compañero y dale una oportunidad de tener un hogar.
+        </p>
+      </div>
 
-          <p class="text-muted">
-            Encuentra un compañero y dale una oportunidad de tener un hogar.
-          </p>
-        </div>
-
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 d-flex flex-column">
-              <h4 class="mt-2">Max</h4>
-              <p class="text-muted">Perro · Amigable y juguetón.</p>
-              <div class="mt-auto">
-                <button class="btn btn-success rounded-pill w-100">
-                  Adoptar
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 d-flex flex-column">
-              <h4 class="mt-2">Luna</h4>
-              <p class="text-muted">Gata · Tranquila y cariñosa.</p>
-              <div class="mt-auto">
-                <button class="btn btn-success rounded-pill w-100">
-                  Adoptar
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="card-white p-4 h-100 d-flex flex-column">
-              <h4 class="mt-2">Rocky</h4>
-              <p class="text-muted">Perro · Activo y sociable.</p>
-              <div class="mt-auto">
-                <button class="btn btn-success rounded-pill w-100">
-                  Adoptar
-                </button>
-              </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 d-flex flex-column shadow-sm rounded-4">
+            <h4 class="mt-2">Max</h4>
+            <p class="text-muted">Perro · Amigable y juguetón.</p>
+            <div class="mt-auto pt-3">
+              <button class="btn btn-success rounded-pill w-100 fw-bold">
+                Adoptar
+              </button>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- BLOG DEL CUIDADOR -->
-      <section id="blog" class="section-gap py-5">
-        <div class="text-center mb-4">
-          <h2 class="display-font text-success">
-            <i class="bi bi-journal-richtext"></i> Blog del Cuidador
-          </h2>
-
-          <p class="text-muted">
-            Consejos sencillos para cuidar, proteger y comprender a los
-            animales.
-          </p>
-        </div>
-
-        <div class="row g-4">
-          <div class="col-md-4">
-            <article class="card-white p-4 h-100">
-              <h4 class="mt-2">Cuidados básicos</h4>
-              <p class="mb-0">
-                Aprende sobre alimentación adecuada, higiene, ejercicio y
-                visitas al veterinario.
-              </p>
-            </article>
-          </div>
-
-          <div class="col-md-4">
-            <article class="card-white p-4 h-100">
-              <h4 class="mt-2">Adoptar con responsabilidad</h4>
-              <p class="mb-0">
-                Conoce la importancia de preparar tu hogar y asumir el
-                compromiso de cuidar a un animal.
-              </p>
-            </article>
-          </div>
-
-          <div class="col-md-4">
-            <article class="card-white p-4 h-100">
-              <h4 class="mt-2">Protección animal</h4>
-              <p class="mb-0">
-                Descubre cómo actuar responsablemente y ayudar a los animales de
-                tu comunidad.
-              </p>
-            </article>
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 d-flex flex-column shadow-sm rounded-4">
+            <h4 class="mt-2">Luna</h4>
+            <p class="text-muted">Gata · Tranquila y cariñosa.</p>
+            <div class="mt-auto pt-3">
+              <button class="btn btn-success rounded-pill w-100 fw-bold">
+                Adoptar
+              </button>
+            </div>
           </div>
         </div>
-      </section>
-    </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-dark text-white-50 text-center py-4">
-      <p class="mb-1">© 2026 WildCare</p>
-      <p class="mb-0">Cuidamos, protegemos y damos nuevas oportunidades.</p>
-    </footer>
-  </body>
+        <div class="col-md-4">
+          <div class="card-white p-4 h-100 d-flex flex-column shadow-sm rounded-4">
+            <h4 class="mt-2">Rocky</h4>
+            <p class="text-muted">Perro · Activo y sociable.</p>
+            <div class="mt-auto pt-3">
+              <button class="btn btn-success rounded-pill w-100 fw-bold">
+                Adoptar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG DEL CUIDADOR -->
+    <section id="blog" class="section-gap py-5">
+      <div class="text-center mb-5">
+        <h2 class="display-font text-success">
+          <i class="bi bi-journal-richtext"></i> Blog del Cuidador
+        </h2>
+        <p class="text-muted">
+          Consejos sencillos para cuidar, proteger y comprender a los animales.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <article class="card-white p-4 h-100 shadow-sm rounded-4 d-flex flex-column">
+            <h4 class="mt-2">Cuidados básicos</h4>
+            <p class="text-muted mb-0">
+              Aprende sobre alimentación adecuada, higiene, ejercicio y visitas al veterinario.
+            </p>
+          </article>
+        </div>
+
+        <div class="col-md-4">
+          <article class="card-white p-4 h-100 shadow-sm rounded-4 d-flex flex-column">
+            <h4 class="mt-2">Adoptar con responsabilidad</h4>
+            <p class="text-muted mb-0">
+              Conoce la importancia de preparar tu hogar y asumir el compromiso de cuidar a un animal.
+            </p>
+          </article>
+        </div>
+
+        <div class="col-md-4">
+          <article class="card-white p-4 h-100 shadow-sm rounded-4 d-flex flex-column">
+            <h4 class="mt-2">Protección animal</h4>
+            <p class="text-muted mb-0">
+              Descubre cómo actuar responsablemente y ayudar a los animales de tu comunidad.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-white-50 text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-1 text-white">© 2026 WildCare</p>
+      <p class="mb-0 small">Cuidamos, protegemos y damos nuevas oportunidades.</p>
+    </div>
+  </footer>
+</body>
+
 </html>
