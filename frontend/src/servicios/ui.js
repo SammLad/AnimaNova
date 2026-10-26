@@ -1,5 +1,5 @@
 /* ===========================================================
-   WildCare — ui.js (Capa de Renderizado de Historias de Usuario)
+   AnimaNova — ui.js (Capa de Renderizado de Historias de Usuario)
 =========================================================== */
 
 // Alertas de confirmación amigables optimizadas para carga rápida e intuitiva
@@ -29,8 +29,8 @@ function wcToast(message, tipo = 'success') {
 
 // Convertidor base64 optimizado para simulación de fotos cargadas
 function wcFileToBase64(file, callback) {
-  if (!file) { callback('https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&auto=format&fit=crop'); return; }
+  if (!file) { callback('../../assets/deer.png'); return; }
   const reader = new FileReader();
-  reader.onload = function(e) { callback(e.target.result); };
+  reader.onload = function (e) { callback(e.target.result); };
   reader.readAsDataURL(file);
 }

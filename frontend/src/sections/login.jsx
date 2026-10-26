@@ -1,69 +1,77 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { DEMO_ACCOUNTS, rolePath, signIn, ROLE_LABELS } from '../servicios/auth';
 import '../assets/styles/login.css';
 
 export default function Login() {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+  function handleSubmit(event) {
+    event.preventDefault();
+    setError('');
+    try {
+      const session = signIn(identifier, password);
+      navigate(rolePath(session.rol), { replace: true });
+    } catch (loginError) {
+      setError(loginError.message);
+    }
+  }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Datos de inicio de sesión:', formData);
-    };
+  return (
+    <main className="auth-page">
+      <section className="auth-card" aria-labelledby="login-title">
+        <Link className="auth-brand" to="/">🐾 <span>Anima Nova</span></Link>
+        <p className="auth-eyebrow">Tu comunidad de cuidado animal</p>
+        <h1 id="login-title">Iniciar sesión</h1>
+        <p className="auth-subtitle">Ingresa para continuar a tu espacio de trabajo.</p>
 
-    return (
-        <div className="login-wrapper">
-            <div className="login-container">
-                <h2>WildCare</h2>
-                <p className="subtitle">Ingresa tus datos para continuar</p>
+        {error && <p className="form-message form-message--error" role="alert">{error}</p>}
 
-                <form onSubmit={handleSubmit} id="loginForm">
-                    <div className="form-group">
-                        <label htmlFor="username">Nombre de usuario</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            placeholder="Usuario"
-                            required
-                            autoComplete="username"
-                        />
-                    </div>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <label htmlFor="identifier">Correo o nombre de usuario</label>
+          <input
+            id="identifier"
+            name="identifier"
+            type="text"
+            value={identifier}
+            onChange={(event) => setIdentifier(event.target.value)}
+            placeholder="nombre@correo.com"
+            autoComplete="username"
+            required
+          />
 
-                    <div className="form-group">
-                        <label htmlFor="password">Contraseña</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="••••••••"
-                            required
-                            autoComplete="current-password"
-                        />
-                    </div>
+          <label htmlFor="password">Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="Escribe tu contraseña"
+            autoComplete="current-password"
+            required
+          />
 
-                    <button type="submit" className="btn-submit">
-                        Ingresar
-                    </button>
-                </form>
+          <button className="button button--primary auth-submit" type="submit">Ingresar</button>
+        </form>
 
-                <div className="login-footer">
-                    <Link to="/">← Volver al inicio</Link>
-                </div>
-            </div>
-        </div>
-    );
+        <aside className="demo-credentials">
+          <strong>Cuentas de prueba por rol</strong>
+          {DEMO_ACCOUNTS.map((account) => (
+            <span key={account.email}>
+              {ROLE_LABELS[account.rol || 'admin']}: {account.email} / {account.password}
+            </span>
+          ))}
+        </aside>
+
+        <p className="auth-switch">
+          ¿Aún no tienes cuenta? <Link to="/crear-cuenta">Crear cuenta</Link>
+        </p>
+        <Link className="auth-back" to="/">← Volver al inicio público</Link>
+      </section>
+    </main>
+  );
 }
