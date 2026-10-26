@@ -1,5 +1,5 @@
 /* ===========================================================
-   WildCare — storage.js (Frontera de Datos & Reglas de Negocio)
+   AnimaNova — storage.js (Frontera de Datos & Reglas de Negocio)
 =========================================================== */
 
 const WC_KEYS = {
@@ -62,7 +62,7 @@ function wcSeedAll() {
       ubicacion: 'Transversal 54 #10-22',
       coordenadas: 'https://maps.google.com/?q=4.6104,-74.0721',
       estado: 'en-adopcion',
-      foto: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=400&auto=format&fit=crop',
+      foto: '../../assets/deer.png',
       fecha: '2026-06-21T15:45:00.000Z',
       comentarios: ['Listo para recibir un hogar seguro.'],
       historialMedico: [{ fecha: '2026-06-22', diagnostico: 'Desparasitación', tratamiento: 'Control veterinario y vacunas.' }]
@@ -75,7 +75,7 @@ function wcSeedAll() {
       ubicacion: 'Calle 142 con Carrera 19',
       coordenadas: 'https://maps.google.com/?q=4.7258,-74.0422',
       estado: 'reportado',
-      foto: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400&auto=format&fit=crop',
+      foto: '../../assets/deer.png',
       fecha: '2026-06-22T10:30:00.000Z',
       comentarios: [],
       historialMedico: []
@@ -84,8 +84,8 @@ function wcSeedAll() {
 
   // Blog Base (Artículos Informativos y Rescates Exitosos)
   wcSet(WC_KEYS.BLOG, [
-    { id: 'art_1', titulo: 'Primeros auxilios ante fracturas de aves', contenido: 'Nunca intentes entablillar el ala sin guantes. Mantén al ave en una caja oscura y ventilada.', aprobado: true, fecha: '2026-06-18', foto: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890?q=80&w=400&auto=format&fit=crop' },
-    { id: 'art_2', titulo: 'Rescate Exitoso: El retorno del Venado de Oro', contenido: 'Gracias al reporte oportuno de la comunidad, logramos recuperar un ciervo juvenil que deambulaba por la zona escolar.', aprobado: true, fecha: '2026-06-20', foto: 'https://plus.unsplash.com/premium_photo-1661819541230-034d07819c9b?q=80&w=400&auto=format&fit=crop' }
+    { id: 'art_1', titulo: 'Primeros auxilios ante fracturas de aves', contenido: 'Nunca intentes entablillar el ala sin guantes. Mantén al ave en una caja oscura y ventilada.', aprobado: true, fecha: '2026-06-18', foto: '../../assets/deer.png' },
+    { id: 'art_2', titulo: 'Rescate Exitoso: El retorno del Venado de Oro', contenido: 'Gracias al reporte oportuno de la comunidad, logramos recuperar un ciervo juvenil que deambulaba por la zona escolar.', aprobado: true, fecha: '2026-06-20', foto: '../../assets/deer.png' }
   ]);
 
   // Donaciones Base
@@ -115,8 +115,7 @@ function wcSeedAll() {
     { id: 'not_1', mensaje: 'Nuevo reporte de Canino en peligro en Calle 142.', fecha: new Date().toISOString(), ubicacion: 'Calle 142 con Carrera 19' }
   ]);
 
-  // Sesión por defecto como Administrador/Rescatista/Refugio integrado para control de testing continuo
-  wcSet(WC_KEYS.SESSION, { usuario: 'Test Core', rol: 'admin' });
+  // No iniciar sesión por defecto; la autenticación debe pasar por el formulario de acceso.
   wcSet(WC_KEYS.SEEDED, true);
 }
 
