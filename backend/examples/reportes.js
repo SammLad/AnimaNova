@@ -14,13 +14,13 @@ async function enviar(ruta, datos) {
   return respuesta.json();
 }
 
-async function listarAnimales() {
+async function listarFauna() {
   const respuesta = await fetch(`${API_ROOT}/animales`);
   if (!respuesta.ok) {
     throw new Error(`La API respondió con el estado ${respuesta.status}`);
   }
 
-  console.log("Animales domésticos:", await respuesta.json());
+  console.log("Fauna silvestre:", await respuesta.json());
 }
 
 async function ejemplo() {
@@ -28,26 +28,25 @@ async function ejemplo() {
     nombre: "Equipo de rescate",
     rol: "rescatista",
     correo: `rescatista-${Date.now()}@animanova.local`,
-    organizacion: "Red comunitaria",
+    organizacion: "Centro de rehabilitación de fauna",
     ubicacion: "Bogotá",
   });
 
   const animal = await enviar("/animales", {
-    nombre: "Luna",
-    especie: "perro",
-    raza: "Criollo",
-    sexo: "hembra",
-    edad_aproximada: "2 años",
-    descripcion: "Perra doméstica encontrada y actualmente bajo cuidado.",
-    vacunado: false,
-    esterilizado: false,
+    especie: "zarigüeya común",
+    grupo_taxonomico: "mamifero",
+    sexo: "desconocido",
+    descripcion: "Zarigüeya silvestre encontrada herida y bajo valoración.",
+    habitat: "Bosque andino",
+    condicion: "Requiere valoración por personal especializado",
     responsable_id: rescatista.id,
   });
 
   const reporte = await enviar("/reportes", {
-    tipo: "encontrado",
+    tipo: "herido",
     especie: animal.especie,
-    descripcion: "Luna fue encontrada cerca del parque del barrio.",
+    grupo_taxonomico: animal.grupo_taxonomico,
+    descripcion: "Se encontró una zarigüeya herida cerca del parque.",
     ubicacion: "Parque principal, Bogotá",
     animal_id: animal.id,
     reportante_id: rescatista.id,
@@ -55,7 +54,7 @@ async function ejemplo() {
   });
 
   console.log("Reporte creado:", reporte);
-  await listarAnimales();
+  await listarFauna();
 }
 
 ejemplo().catch((error) => console.error("Error al comunicarse con AnimaNova:", error));

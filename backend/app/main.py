@@ -2,26 +2,57 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 import sqlite3
+import unicodedata
 from typing import Generator, Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BACKEND_DIR / "data"
-DATABASE_PATH = DATA_DIR / "animanova.db"
-PetSpecies = Literal["perro", "gato", "conejo", "ave_domestica", "pez", "otro_domestico"]
-ActorRole = Literal["usuario", "rescatista", "refugio", "adoptante"]
-AnimalStatus = Literal["en_cuidado", "perdido", "encontrado", "en_adopcion", "adoptado"]
-ReportType = Literal["perdido", "encontrado", "ayuda", "adopcion"]
+DATABASE_PATH = DATA_DIR / "fauna_silvestre.db"
+WildlifeGroup = Literal["mamifero", "ave", "reptil", "anfibio", "pez", "invertebrado"]
+ActorRole = Literal[
+    "ciudadano", "rescatista", "refugio", "zoologico", "autoridad_ambiental"
+]
+AnimalStatus = Literal[
+    "reportado", "rescatado", "en_rehabilitacion", "liberado", "fallecido"
+]
+ReportType = Literal[
+    "avistamiento", "herido", "rescate", "amenaza", "trafico_ilegal", "liberacion"
+]
 ReportStatus = Literal["pendiente", "en_revision", "atendido", "cerrado"]
+
+
+def validate_wild_species(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value.strip().casefold())
+    normalized = "".join(
+        character for character in normalized
+        if not unicodedata.combining(character)
+    )
+    domestic_species = {
+        "perro", "perros", "dog", "dogs", "canino", "canina",
+        "gato", "gatos", "cat", "cats", "felino domestico",
+        "conejo", "conejos", "rabbit", "rabbits",
+        "hamster", "hamsters", "cobaya", "cobayas", "cuy",
+        "canario", "canarios", "periquito", "periquitos",
+        "pez betta", "goldfish", "pez dorado",
+        "canis lupus familiaris", "canis familiaris", "felis catus",
+        "oryctolagus cuniculus", "cavia porcellus", "mus musculus",
+        "rattus norvegicus", "mesocricetus auratus", "serinus canaria",
+        "melopsittacus undulatus", "betta splendens", "carassius auratus",
+    }
+    if normalized in domestic_species:
+        raise ValueError("Solo se admiten especies de fauna silvestre")
+    return value.strip()
+
 
 app = FastAPI(
     title="AnimaNova API",
-    description="Gestión de animales domésticos, sus cuidadores y reportes comunitarios.",
-    version="0.2.0",
+    description="Registro y atención de fauna silvestre y reportes comunitarios.",
+    version="1.0.0",
 )
 
 app.add_middleware(
@@ -43,27 +74,39 @@ class ActorCreate(BaseModel):
 
 class AnimalCreate(BaseModel):
     nombre: str | None = Field(default=None, max_length=80)
-    especie: PetSpecies
-    raza: str | None = Field(default=None, max_length=80)
+    especie: str = Field(min_length=2, max_length=120)
+    grupo_taxonomico: WildlifeGroup
     sexo: Literal["macho", "hembra", "desconocido"] = "desconocido"
     edad_aproximada: str | None = Field(default=None, max_length=50)
     descripcion: str = Field(min_length=10, max_length=1000)
-    vacunado: bool | None = None
-    esterilizado: bool | None = None
-    estado: AnimalStatus = "en_cuidado"
+    habitat: str | None = Field(default=None, max_length=200)
+    condicion: str | None = Field(default=None, max_length=200)
+    estado_conservacion: str | None = Field(default=None, max_length=80)
+    estado: AnimalStatus = "reportado"
     responsable_id: int | None = Field(default=None, gt=0)
     imagen_url: str | None = Field(default=None, max_length=500)
+
+    @field_validator("especie")
+    @classmethod
+    def reject_domestic_species(cls, value: str) -> str:
+        return validate_wild_species(value)
 
 
 class ReportCreate(BaseModel):
     tipo: ReportType
-    especie: PetSpecies
+    especie: str = Field(min_length=2, max_length=120)
+    grupo_taxonomico: WildlifeGroup
     descripcion: str = Field(min_length=10, max_length=1000)
     ubicacion: str = Field(min_length=3, max_length=200)
     animal_id: int | None = Field(default=None, gt=0)
     reportante_id: int | None = Field(default=None, gt=0)
     contacto: str | None = Field(default=None, max_length=100)
     imagen_url: str | None = Field(default=None, max_length=500)
+
+    @field_validator("especie")
+    @classmethod
+    def reject_domestic_species(cls, value: str) -> str:
+        return validate_wild_species(value)
 
 
 class ReportStatusUpdate(BaseModel):
@@ -92,22 +135,14 @@ def get_connection() -> Generator[sqlite3.Connection, None, None]:
 def initialize_database() -> None:
     DATA_DIR.mkdir(exist_ok=True)
     with get_connection() as connection:
-        existing_reports = connection.execute(
-            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'reportes'"
-        ).fetchone()
-        if existing_reports:
-            columns = {
-                row["name"] for row in connection.execute("PRAGMA table_info(reportes)")
-            }
-            if "tipo" not in columns:
-                connection.execute("ALTER TABLE reportes RENAME TO reportes_anteriores")
-
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS actores (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
-                rol TEXT NOT NULL CHECK (rol IN ('usuario', 'rescatista', 'refugio', 'adoptante')),
+                rol TEXT NOT NULL CHECK (rol IN (
+                    'ciudadano', 'rescatista', 'refugio', 'zoologico', 'autoridad_ambiental'
+                )),
                 correo TEXT NOT NULL UNIQUE,
                 telefono TEXT,
                 organizacion TEXT,
@@ -121,16 +156,29 @@ def initialize_database() -> None:
             CREATE TABLE IF NOT EXISTS animales (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT,
-                especie TEXT NOT NULL CHECK (especie IN (
-                    'perro', 'gato', 'conejo', 'ave_domestica', 'pez', 'otro_domestico'
+                especie TEXT NOT NULL CHECK (lower(especie) NOT IN (
+                    'perro', 'perros', 'dog', 'dogs', 'canino', 'canina',
+                    'gato', 'gatos', 'cat', 'cats', 'conejo', 'conejos',
+                    'rabbit', 'rabbits', 'hamster', 'hamsters', 'cobaya',
+                    'cobayas', 'cuy', 'canario', 'canarios', 'periquito',
+                    'periquitos', 'pez betta', 'goldfish', 'pez dorado',
+                    'canis lupus familiaris', 'canis familiaris', 'felis catus',
+                    'oryctolagus cuniculus', 'cavia porcellus', 'mus musculus',
+                    'rattus norvegicus', 'mesocricetus auratus', 'serinus canaria',
+                    'melopsittacus undulatus', 'betta splendens', 'carassius auratus'
                 )),
-                raza TEXT,
+                grupo_taxonomico TEXT NOT NULL CHECK (grupo_taxonomico IN (
+                    'mamifero', 'ave', 'reptil', 'anfibio', 'pez', 'invertebrado'
+                )),
                 sexo TEXT NOT NULL,
                 edad_aproximada TEXT,
                 descripcion TEXT NOT NULL,
-                vacunado INTEGER,
-                esterilizado INTEGER,
-                estado TEXT NOT NULL,
+                habitat TEXT,
+                condicion TEXT,
+                estado_conservacion TEXT,
+                estado TEXT NOT NULL CHECK (estado IN (
+                    'reportado', 'rescatado', 'en_rehabilitacion', 'liberado', 'fallecido'
+                )),
                 responsable_id INTEGER REFERENCES actores(id),
                 imagen_url TEXT,
                 fecha_creacion TEXT NOT NULL
@@ -141,9 +189,23 @@ def initialize_database() -> None:
             """
             CREATE TABLE IF NOT EXISTS reportes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tipo TEXT NOT NULL,
-                especie TEXT NOT NULL CHECK (especie IN (
-                    'perro', 'gato', 'conejo', 'ave_domestica', 'pez', 'otro_domestico'
+                tipo TEXT NOT NULL CHECK (tipo IN (
+                    'avistamiento', 'herido', 'rescate', 'amenaza',
+                    'trafico_ilegal', 'liberacion'
+                )),
+                especie TEXT NOT NULL CHECK (lower(especie) NOT IN (
+                    'perro', 'perros', 'dog', 'dogs', 'canino', 'canina',
+                    'gato', 'gatos', 'cat', 'cats', 'conejo', 'conejos',
+                    'rabbit', 'rabbits', 'hamster', 'hamsters', 'cobaya',
+                    'cobayas', 'cuy', 'canario', 'canarios', 'periquito',
+                    'periquitos', 'pez betta', 'goldfish', 'pez dorado',
+                    'canis lupus familiaris', 'canis familiaris', 'felis catus',
+                    'oryctolagus cuniculus', 'cavia porcellus', 'mus musculus',
+                    'rattus norvegicus', 'mesocricetus auratus', 'serinus canaria',
+                    'melopsittacus undulatus', 'betta splendens', 'carassius auratus'
+                )),
+                grupo_taxonomico TEXT NOT NULL CHECK (grupo_taxonomico IN (
+                    'mamifero', 'ave', 'reptil', 'anfibio', 'pez', 'invertebrado'
                 )),
                 descripcion TEXT NOT NULL,
                 ubicacion TEXT NOT NULL,
@@ -151,7 +213,9 @@ def initialize_database() -> None:
                 reportante_id INTEGER REFERENCES actores(id),
                 contacto TEXT,
                 imagen_url TEXT,
-                estado TEXT NOT NULL DEFAULT 'pendiente',
+                estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN (
+                    'pendiente', 'en_revision', 'atendido', 'cerrado'
+                )),
                 fecha_creacion TEXT NOT NULL
             )
             """
@@ -168,7 +232,7 @@ initialize_database()
 @app.get("/", tags=["inicio"])
 def read_root() -> dict[str, str]:
     return {
-        "mensaje": "API de AnimaNova para animales domésticos",
+        "mensaje": "API de AnimaNova para fauna silvestre",
         "documentacion": "/docs",
     }
 
@@ -215,7 +279,7 @@ def list_actors(rol: ActorRole | None = None) -> list[dict[str, object]]:
     return [row_to_dict(actor) for actor in actors]
 
 
-@app.post("/api/animales", status_code=201, tags=["animales domésticos"])
+@app.post("/api/animales", status_code=201, tags=["fauna silvestre"])
 def create_animal(animal: AnimalCreate) -> dict[str, object]:
     created_at = datetime.now(timezone.utc).isoformat()
     try:
@@ -223,19 +287,21 @@ def create_animal(animal: AnimalCreate) -> dict[str, object]:
             cursor = connection.execute(
                 """
                 INSERT INTO animales (
-                    nombre, especie, raza, sexo, edad_aproximada, descripcion,
-                    vacunado, esterilizado, estado, responsable_id, imagen_url, fecha_creacion
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    nombre, especie, grupo_taxonomico, sexo, edad_aproximada, descripcion,
+                    habitat, condicion, estado_conservacion, estado, responsable_id,
+                    imagen_url, fecha_creacion
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     animal.nombre,
                     animal.especie,
-                    animal.raza,
+                    animal.grupo_taxonomico,
                     animal.sexo,
                     animal.edad_aproximada,
                     animal.descripcion,
-                    animal.vacunado,
-                    animal.esterilizado,
+                    animal.habitat,
+                    animal.condicion,
+                    animal.estado_conservacion,
                     animal.estado,
                     animal.responsable_id,
                     animal.imagen_url,
@@ -250,9 +316,10 @@ def create_animal(animal: AnimalCreate) -> dict[str, object]:
     return row_to_dict(saved_animal)
 
 
-@app.get("/api/animales", tags=["animales domésticos"])
+@app.get("/api/animales", tags=["fauna silvestre"])
 def list_animals(
-    especie: PetSpecies | None = None,
+    especie: str | None = None,
+    grupo_taxonomico: WildlifeGroup | None = None,
     estado: AnimalStatus | None = None,
 ) -> list[dict[str, object]]:
     conditions = []
@@ -260,6 +327,9 @@ def list_animals(
     if especie:
         conditions.append("especie = ?")
         parameters.append(especie)
+    if grupo_taxonomico:
+        conditions.append("grupo_taxonomico = ?")
+        parameters.append(grupo_taxonomico)
     if estado:
         conditions.append("estado = ?")
         parameters.append(estado)
@@ -271,18 +341,18 @@ def list_animals(
     return [row_to_dict(animal) for animal in animals]
 
 
-@app.get("/api/animales/{animal_id}", tags=["animales domésticos"])
+@app.get("/api/animales/{animal_id}", tags=["fauna silvestre"])
 def get_animal(animal_id: int) -> dict[str, object]:
     with get_connection() as connection:
         animal = connection.execute(
             "SELECT * FROM animales WHERE id = ?", (animal_id,)
         ).fetchone()
     if animal is None:
-        raise HTTPException(status_code=404, detail="Animal doméstico no encontrado")
+        raise HTTPException(status_code=404, detail="Registro de fauna silvestre no encontrado")
     return row_to_dict(animal)
 
 
-@app.patch("/api/animales/{animal_id}/estado", tags=["animales domésticos"])
+@app.patch("/api/animales/{animal_id}/estado", tags=["fauna silvestre"])
 def update_animal_status(
     animal_id: int, update: AnimalStatusUpdate
 ) -> dict[str, object]:
@@ -292,39 +362,44 @@ def update_animal_status(
             (update.estado, animal_id),
         )
         if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Animal doméstico no encontrado")
+            raise HTTPException(status_code=404, detail="Registro de fauna silvestre no encontrado")
         animal = connection.execute(
             "SELECT * FROM animales WHERE id = ?", (animal_id,)
         ).fetchone()
     return row_to_dict(animal)
 
 
-@app.post("/api/reportes", status_code=201, tags=["reportes domésticos"])
+@app.post("/api/reportes", status_code=201, tags=["reportes de fauna silvestre"])
 def create_report(report: ReportCreate) -> dict[str, object]:
     created_at = datetime.now(timezone.utc).isoformat()
     with get_connection() as connection:
         if report.animal_id is not None:
             animal = connection.execute(
-                "SELECT especie FROM animales WHERE id = ?", (report.animal_id,)
+                "SELECT especie, grupo_taxonomico FROM animales WHERE id = ?",
+                (report.animal_id,),
             ).fetchone()
             if animal is None:
-                raise HTTPException(status_code=404, detail="Animal doméstico no encontrado")
-            if animal["especie"] != report.especie:
+                raise HTTPException(status_code=404, detail="Registro de fauna silvestre no encontrado")
+            if (
+                animal["especie"] != report.especie
+                or animal["grupo_taxonomico"] != report.grupo_taxonomico
+            ):
                 raise HTTPException(
                     status_code=422,
-                    detail="La especie del reporte debe coincidir con la del animal",
+                    detail="La especie y el grupo del reporte deben coincidir con el registro del animal",
                 )
         try:
             cursor = connection.execute(
                 """
                 INSERT INTO reportes (
-                    tipo, especie, descripcion, ubicacion, animal_id, reportante_id,
-                    contacto, imagen_url, fecha_creacion
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    tipo, especie, grupo_taxonomico, descripcion, ubicacion, animal_id,
+                    reportante_id, contacto, imagen_url, fecha_creacion
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     report.tipo,
                     report.especie,
+                    report.grupo_taxonomico,
                     report.descripcion,
                     report.ubicacion,
                     report.animal_id,
@@ -342,7 +417,7 @@ def create_report(report: ReportCreate) -> dict[str, object]:
     return row_to_dict(saved_report)
 
 
-@app.get("/api/reportes", tags=["reportes domésticos"])
+@app.get("/api/reportes", tags=["reportes de fauna silvestre"])
 def list_reports(
     tipo: ReportType | None = None,
     estado: ReportStatus | None = None,
@@ -363,7 +438,7 @@ def list_reports(
     return [row_to_dict(report) for report in reports]
 
 
-@app.get("/api/reportes/{report_id}", tags=["reportes domésticos"])
+@app.get("/api/reportes/{report_id}", tags=["reportes de fauna silvestre"])
 def get_report(report_id: int) -> dict[str, object]:
     with get_connection() as connection:
         report = connection.execute(
@@ -374,7 +449,7 @@ def get_report(report_id: int) -> dict[str, object]:
     return row_to_dict(report)
 
 
-@app.patch("/api/reportes/{report_id}/estado", tags=["reportes domésticos"])
+@app.patch("/api/reportes/{report_id}/estado", tags=["reportes de fauna silvestre"])
 def update_report_status(
     report_id: int, update: ReportStatusUpdate
 ) -> dict[str, object]:
