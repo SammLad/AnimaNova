@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DEMO_ACCOUNTS, rolePath, signIn, ROLE_LABELS } from '../servicios/auth';
 import '../assets/styles/login.css';
+import deerIcon from '../assets/deer.png'
 
 export default function Login() {
   const [identifier, setIdentifier] = useState('');
@@ -23,7 +24,8 @@ export default function Login() {
   return (
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="login-title">
-        <Link className="auth-brand" to="/">🐾 <span>Anima Nova</span></Link>
+        <Link className="auth-brand" to="/">
+          <img className="brand__mark" src={deerIcon} alt="" /><span>Anima Nova</span></Link>
         <p className="auth-eyebrow">Tu comunidad de cuidado animal</p>
         <h1 id="login-title">Iniciar sesión</h1>
         <p className="auth-subtitle">Ingresa para continuar a tu espacio de trabajo.</p>

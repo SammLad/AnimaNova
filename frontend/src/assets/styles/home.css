@@ -90,7 +90,7 @@
 .animal-card h3 { margin: 7px 0 3px; color: #614832; font-family: Manrope, sans-serif; }
 .animal-card p { margin: 0 0 14px; color: #807567; font-size: 12px; }
 .animal-card .button { width: 100%; }
-.adoption-note { margin: 19px 0 0; color: #887f72; font-size: 11px; text-align: center; }
+
 .donation-section { display: grid; grid-template-columns: 1.1fr .9fr; gap: 50px; align-items: center; margin: 25px 0; padding: 42px; border: 1px solid #dce2cf; border-radius: 22px; background: #edf0e4; }
 .donation-copy h2 { max-width: 470px; }
 .donation-copy p { max-width: 490px; }

@@ -72,7 +72,7 @@
 .field-guide { margin-top: 19px; padding: 13px; border-radius: 10px; background: #f4f7f3; }
 .field-guide strong { color: #4b6951; font-size: 10px; }
 .field-guide p { margin: 6px 0 0; color: #7b877e; font-size: 10px; line-height: 1.65; }
-.citizen-adoption-link { display: inline-block; margin-top: 16px; text-decoration: none; }
+
 .citizen-report-card { margin-top: 17px; }
 .dashboard-report-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .dashboard-report-form label { display: grid; gap: 7px; color: #506052; font-size: 10px; font-weight: 700; }

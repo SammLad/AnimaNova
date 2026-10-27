@@ -1,6 +1,7 @@
 const USERS_KEY = 'anima_users';
 const SESSION_KEY = 'anima_session';
 const REPORTS_KEY = 'anima_reports';
+export const VALID_ROLES = ['admin', 'usuario', 'rescatista', 'refugio'];
 
 export const DEMO_ADMIN = {
   email: 'admin@animanova.com',
@@ -9,21 +10,30 @@ export const DEMO_ADMIN = {
 
 export const DEMO_ACCOUNTS = [
   DEMO_ADMIN,
+  { email: 'usuario@animanova.com', password: 'Usuario2026!', nombre: 'Ana García', rol: 'usuario' },
   { email: 'rescatista@animanova.com', password: 'Rescate2026!', nombre: 'Equipo Rescate', rol: 'rescatista' },
   { email: 'refugio@animanova.com', password: 'Refugio2026!', nombre: 'Refugio Esperanza', rol: 'refugio' },
-  { email: 'fauna@animanova.com', password: 'Fauna2026!', nombre: 'Centro de Fauna', rol: 'zoologico' },
 ];
 
 export const ROLE_LABELS = {
   admin: 'Administrador',
-  ciudadano: 'Ciudadano',
+  usuario: 'Usuario',
   rescatista: 'Rescatista',
   refugio: 'Refugio',
-  zoologico: 'Zoológico',
 };
 
+export function normalizeRole(role) {
+  if (!role) return role;
+  const normalized = String(role).trim().toLowerCase();
+  if (normalized === 'ciudadano') return 'usuario';
+  return normalized;
+}
+
 export function rolePath(role) {
-  return role === 'admin' ? '/panel/admin' : '/';
+  const normalized = normalizeRole(role);
+  if (!normalized) return '/';
+  if (normalized === 'admin') return '/panel/admin';
+  return VALID_ROLES.includes(normalized) ? `/panel/${normalized}` : '/';
 }
 
 function readArray(key) {
@@ -38,7 +48,11 @@ function readArray(key) {
 }
 
 function ensureDemoData() {
-  const users = readArray(USERS_KEY);
+  const users = readArray(USERS_KEY).map((user) => ({
+    ...user,
+    rol: normalizeRole(user.rol),
+  }));
+
   let usersChanged = false;
   DEMO_ACCOUNTS.forEach((account, index) => {
     if (!users.some((user) => user.email === account.email)) {
@@ -53,8 +67,14 @@ function ensureDemoData() {
       usersChanged = true;
     }
   });
-  if (usersChanged) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+
+  const normalizedUsers = users.map((user) => ({
+    ...user,
+    rol: VALID_ROLES.includes(normalizeRole(user.rol)) ? normalizeRole(user.rol) : 'usuario',
+  }));
+
+  if (usersChanged || JSON.stringify(users) !== JSON.stringify(normalizedUsers)) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(normalizedUsers));
   }
 
   const reports = readArray(REPORTS_KEY);
@@ -62,19 +82,21 @@ function ensureDemoData() {
     localStorage.setItem(REPORTS_KEY, JSON.stringify([
       {
         id: 'REP-1042',
-        especie: 'Canino',
-        ubicacion: 'Calle 142 con Carrera 19',
-        descripcion: 'Perrito con una pata lastimada, resguardado en un lugar seguro.',
-        estado: 'Reportado',
+        especie: 'Ave silvestre',
+        ubicacion: 'Parque del Norte',
+        descripcion: 'Ave encontrada en el suelo, con heridas leves y dificultad para volar.',
+        estado: 'Pendiente',
         fecha: '2026-10-25',
+        reportadoPor: 'Usuario demo',
       },
       {
         id: 'REP-1041',
-        especie: 'Ave silvestre',
-        ubicacion: 'Parque del Norte',
-        descripcion: 'Ave encontrada en el suelo; requiere revisión de un especialista.',
+        especie: 'Mamífero silvestre',
+        ubicacion: 'Calle 142 con Carrera 19',
+        descripcion: 'Se observó un mamífero en una zona urbana con síntomas de desorientación.',
         estado: 'En atención',
         fecha: '2026-10-24',
+        reportadoPor: 'Usuario demo',
       },
     ]));
   }
@@ -83,7 +105,10 @@ function ensureDemoData() {
 ensureDemoData();
 
 export function getUsers() {
-  return readArray(USERS_KEY);
+  return readArray(USERS_KEY).map((user) => ({
+    ...user,
+    rol: normalizeRole(user.rol),
+  }));
 }
 
 export function getReports() {
@@ -106,7 +131,7 @@ export function registerCitizen({ nombre, email, password }) {
     nombre: nombre.trim(),
     email: normalizedEmail,
     password,
-    rol: 'ciudadano',
+    rol: 'usuario',
     estado: 'activo',
   };
 
@@ -126,14 +151,16 @@ export function signIn(identifier, password) {
 
   if (!user) throw new Error('Usuario o contraseña incorrectos, o la cuenta está suspendida.');
 
-  const session = { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol };
+  const session = { id: user.id, nombre: user.nombre, email: user.email, rol: normalizeRole(user.rol) };
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   return session;
 }
 
 export function getSession() {
   try {
-    return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    const session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    if (!session) return null;
+    return { ...session, rol: normalizeRole(session.rol) };
   } catch (error) {
     console.error('No se pudo recuperar la sesión actual.', error);
     return null;

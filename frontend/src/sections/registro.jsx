@@ -25,7 +25,7 @@ export default function Register() {
     }
     try {
       registerCitizen(form);
-      navigate('/', { replace: true, state: { notice: '¡Cuenta creada! Ya puedes iniciar sesión como ciudadano.' } });
+      navigate('/', { replace: true, state: { notice: '¡Cuenta creada! Ya puedes iniciar sesión como usuario.' } });
     } catch (registrationError) {
       setError(registrationError.message);
     }
@@ -37,7 +37,7 @@ export default function Register() {
         <Link className="auth-brand" to="/">🐾 <span>Anima Nova</span></Link>
         <p className="auth-eyebrow">Únete a la comunidad</p>
         <h1 id="register-title">Crear cuenta</h1>
-        <p className="auth-subtitle">Regístrate para apoyar rescates y adoptar responsablemente.</p>
+        <p className="auth-subtitle">Regístrate para apoyar rescates y reportar animales silvestres en peligro.</p>
 
         {error && <p className="form-message form-message--error" role="alert">{error}</p>}
 
