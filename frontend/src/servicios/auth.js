@@ -77,19 +77,19 @@ function ensureDemoData() {
       JSON.stringify([
         {
           id: "REP-1042",
-          especie: "Canino",
+          especie: "Ave silvestre",
           ubicacion: "Calle 142 con Carrera 19",
           descripcion:
-            "Perrito con una pata lastimada, resguardado en un lugar seguro.",
+            "Ave silvestre encontrada herida; se reportó a un equipo especializado.",
           estado: "Reportado",
           fecha: "2026-10-25",
         },
         {
           id: "REP-1041",
-          especie: "Felino",
+          especie: "Zarigüeya",
           ubicacion: "Parque del Norte",
           descripcion:
-            "Gato encontrado en el parque; requiere revisión veterinaria.",
+            "Zarigüeya encontrada en una zona urbana; requiere valoración especializada.",
           estado: "En atención",
           fecha: "2026-10-24",
         },

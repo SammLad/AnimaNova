@@ -25,14 +25,13 @@ const PORTALS = {
   },
   ciudadano: {
     title: "Mi espacio ciudadano",
-    subtitle:
-      "Consulta tus reportes y participa en una comunidad que protege la vida animal.",
-    navigation: ["Resumen", "Mis reportes", "Adopciones"],
+    subtitle: "Consulta tus reportes y ayuda a proteger la fauna silvestre.",
+    navigation: ["Resumen", "Mis reportes", "Conservación"],
     intro: "Participación ciudadana",
     actions: [
       "Reporta animales en riesgo",
       "Da seguimiento a los casos",
-      "Consulta animales disponibles para adopción",
+      "Conoce cómo apoyar la rehabilitación de fauna silvestre",
     ],
   },
   rescatista: {
@@ -48,15 +47,15 @@ const PORTALS = {
     ],
   },
   refugio: {
-    title: "Panel del refugio",
+    title: "Centro de rehabilitación",
     subtitle:
-      "Coordina ingresos, cuidados y oportunidades de adopción desde un solo lugar.",
-    navigation: ["Resumen", "Casos recibidos", "Adopciones"],
-    intro: "Gestión del refugio",
+      "Coordina la atención, rehabilitación y liberación responsable de fauna silvestre.",
+    navigation: ["Resumen", "Casos recibidos", "Rehabilitación"],
+    intro: "Gestión de rehabilitación",
     actions: [
       "Revisa animales remitidos",
       "Actualiza el estado de atención",
-      "Promueve adopciones responsables",
+      "Coordina la rehabilitación y liberación autorizada",
     ],
   },
 };
@@ -412,19 +411,11 @@ export default function AdminDashboard() {
                       )}
                       {role === "refugio" && (
                         <div className="field-guide">
-                          <strong>Requisitos de adopción</strong>
+                          <strong>Atención de fauna silvestre</strong>
                           <p>
-                            Identificación vigente, espacio seguro y compromiso
-                            de cuidado veterinario.
-                          </p>
-                        </div>
-                      )}
-                      {role === "zoologico" && (
-                        <div className="field-guide">
-                          <strong>Atención especializada</strong>
-                          <p>
-                            Coordina evaluaciones con personal veterinario de
-                            fauna y registra cada avance.
+                            Prioriza la valoración por especialistas y evita
+                            mantener ejemplares silvestres fuera de programas
+                            autorizados de rehabilitación.
                           </p>
                         </div>
                       )}
@@ -433,7 +424,7 @@ export default function AdminDashboard() {
                           className="text-button citizen-adoption-link"
                           href="/#adopciones"
                         >
-                          Ver animales en adopción →
+                          Conocer la rehabilitación de fauna →
                         </a>
                       )}
                     </section>
@@ -498,8 +489,7 @@ export default function AdminDashboard() {
               )}
 
               {(activeTab === "Guía de campo" ||
-                (role === "refugio" && activeTab === "Adopciones") ||
-                (role === "zoologico" && activeTab === "Rehabilitación")) && (
+                (role === "refugio" && activeTab === "Rehabilitación")) && (
                 <section className="dashboard-card guidance-panel">
                   <div className="card-heading">
                     <div>
@@ -530,54 +520,44 @@ export default function AdminDashboard() {
                   )}
                   {role === "refugio" && (
                     <div className="field-guide">
-                      <strong>Requisitos básicos para adopción</strong>
+                      <strong>Rehabilitación y liberación</strong>
                       <p>
-                        Solicita identificación vigente, verifica que el hogar
-                        tenga un espacio seguro y acuerda seguimiento
-                        veterinario y cuidado responsable.
-                      </p>
-                    </div>
-                  )}
-                  {role === "zoologico" && (
-                    <div className="field-guide">
-                      <strong>Seguimiento de rehabilitación</strong>
-                      <p>
-                        Documenta la evaluación inicial, coordina con personal
-                        veterinario de fauna y registra cada avance antes de
-                        planear la liberación.
+                        Registra la valoración veterinaria, coordina la
+                        rehabilitación con personal autorizado y planifica la
+                        liberación solo cuando sea segura.
                       </p>
                     </div>
                   )}
                 </section>
               )}
 
-              {role === "ciudadano" && activeTab === "Adopciones" && (
+              {role === "ciudadano" && activeTab === "Conservación" && (
                 <section className="dashboard-card guidance-panel">
                   <div className="card-heading">
                     <div>
-                      <h3>Animales que buscan hogar</h3>
+                      <h3>Fauna silvestre en rehabilitación</h3>
                       <p>
-                        Conoce el proceso de adopción responsable desde el sitio
-                        público.
+                        Apoya la recuperación de fauna silvestre y su retorno
+                        seguro a un hábitat adecuado.
                       </p>
                     </div>
                   </div>
                   <ul className="quick-list">
                     <li>
-                      <span>🐕</span>Max · Amigable y juguetón
+                      <span>🦝</span>Zarigüeya · En valoración veterinaria
                     </li>
                     <li>
-                      <span>🐈</span>Luna · Tranquila y cariñosa
+                      <span>🦜</span>Guacamaya · En proceso de rehabilitación
                     </li>
                     <li>
-                      <span>🐶</span>Rocky · Activo y sociable
+                      <span>🦎</span>Iguana · En observación especializada
                     </li>
                   </ul>
                   <Link
                     className="text-button citizen-adoption-link"
                     to="/#adopciones"
                   >
-                    Ver adopciones y requisitos →
+                    Conocer la rehabilitación →
                   </Link>
                 </section>
               )}
@@ -619,7 +599,11 @@ function CitizenReportForm({ onSubmit, message }) {
       <form className="dashboard-report-form" onSubmit={onSubmit}>
         <label>
           Especie o tipo
-          <input name="especie" required placeholder="Ej. Gato, ave, perro" />
+          <input
+            name="especie"
+            required
+            placeholder="Ej. Ave silvestre, zarigüeya, iguana"
+          />
         </label>
         <label>
           Ubicación
@@ -656,7 +640,6 @@ function ReportTable({ reports, onUpdate, role }) {
     admin: { label: "Validar caso", status: "En atención" },
     rescatista: { label: "Atender", status: "En atención" },
     refugio: { label: "Recibir caso", status: "En refugio" },
-    zoologico: { label: "Iniciar revisión", status: "En evaluación" },
   }[role];
 
   return (

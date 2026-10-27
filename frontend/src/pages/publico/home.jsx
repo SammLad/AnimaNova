@@ -10,23 +10,36 @@ import {
 import "../../assets/styles/home.css";
 
 const animals = [
-  { name: "Max", detail: "Perro · Amigable y juguetón", emoji: "🐕" },
-  { name: "Luna", detail: "Gata · Tranquila y cariñosa", emoji: "🐈" },
-  { name: "Rocky", detail: "Perro · Activo y sociable", emoji: "🐶" },
+  {
+    name: "Zarigüeya común",
+    detail:
+      "En valoración veterinaria tras ser encontrada fuera de su hábitat.",
+    emoji: "🦝",
+  },
+  {
+    name: "Guacamaya",
+    detail: "En recuperación con seguimiento de especialistas en fauna.",
+    emoji: "🦜",
+  },
+  {
+    name: "Iguana verde",
+    detail: "En observación para determinar si puede volver a su entorno.",
+    emoji: "🦎",
+  },
 ];
 
 const stories = [
   {
-    title: "Cuidados básicos",
-    text: "Aprende sobre alimentación adecuada, higiene, ejercicio y visitas al veterinario.",
+    title: "Cómo actuar ante fauna herida",
+    text: "Mantén distancia, evita manipular al animal y contacta a las autoridades ambientales o a un centro de rescate.",
   },
   {
-    title: "Adoptar con responsabilidad",
-    text: "Prepara tu hogar y asume el compromiso de cuidar a un animal durante toda su vida.",
+    title: "Rehabilitación y liberación",
+    text: "Conoce por qué la atención especializada y la liberación en un hábitat adecuado son esenciales para la fauna silvestre.",
   },
   {
-    title: "Protección animal",
-    text: "Conoce cómo actuar responsablemente y ayudar a los animales de tu comunidad.",
+    title: "Protege su hábitat",
+    text: "Aprende a reducir riesgos para las especies silvestres y a reportar amenazas en su entorno.",
   },
 ];
 
@@ -111,7 +124,7 @@ export default function Home() {
           <nav className="main-nav" aria-label="Navegación principal">
             <a href="#inicio">Inicio</a>
             <a href="#reportar">Reportar</a>
-            <a href="#adopciones">Adopciones</a>
+            <a href="#adopciones">Conservación</a>
             <a href="#donaciones">Donaciones</a>
             <a href="#blog">Blog</a>
           </nav>
@@ -153,15 +166,16 @@ export default function Home() {
             <span className="eyebrow">Cuidamos cada historia</span>
             <h1>Una comunidad que protege y transforma vidas.</h1>
             <p>
-              Anima Nova conecta a ciudadanos, rescatistas y refugios para dar a
-              cada animal una nueva oportunidad.
+              Anima Nova conecta a ciudadanos, rescatistas y centros
+              especializados para proteger la fauna silvestre mediante rescate,
+              rehabilitación y conservación de sus hábitats.
             </p>
             <div className="hero-actions">
               <a href="#reportar" className="button button--primary">
                 Reportar un animal
               </a>
               <a href="#adopciones" className="button button--outline">
-                Conocer adopciones
+                Conocer la rehabilitación
               </a>
             </div>
             <div className="hero-stats">
@@ -197,9 +211,9 @@ export default function Home() {
             <span className="eyebrow">¿Quiénes somos?</span>
             <h2>El cuidado animal nos une.</h2>
             <p>
-              Somos una comunidad dedicada al rescate y protección de animales
-              domésticos. Facilitamos la colaboración para que puedan vivir de
-              manera segura y encontrar hogares responsables.
+              Somos una comunidad dedicada al rescate, rehabilitación y
+              protección de animales silvestres. Facilitamos la colaboración con
+              especialistas para favorecer su regreso seguro a la naturaleza.
             </p>
           </article>
           <article className="intro-card">
@@ -211,11 +225,11 @@ export default function Home() {
             </p>
           </article>
           <article className="intro-card">
-            <span className="feature-icon">🏡</span>
-            <h3>Nuevos hogares</h3>
+            <span className="feature-icon">🌿</span>
+            <h3>Rehabilitación y liberación</h3>
             <p>
-              Impulsamos adopciones responsables y acompañamos a quienes desean
-              brindar una familia.
+              Apoyamos la recuperación de cada ejemplar y su retorno responsable
+              a un hábitat adecuado.
             </p>
           </article>
         </section>
@@ -235,7 +249,7 @@ export default function Home() {
               <input
                 id="report-especie"
                 name="especie"
-                placeholder="Ej. Perro, Gato, conejo"
+                placeholder="Ej. Ave silvestre, zarigüeya, iguana"
                 required
               />
               <label htmlFor="report-location">Ubicación</label>
@@ -266,9 +280,17 @@ export default function Home() {
               <span className="feature-icon">🚨</span>
               <h3>Consejos mientras llega ayuda</h3>
               <ul>
-                <li>Mantén una distancia segura y evita asustar al animal.</li>
-                <li>No suministres medicamentos ni alimentos a la fuerza.</li>
-                <li>Comparte una ubicación clara y visible.</li>
+                <li>
+                  No intentes tocar, capturar ni trasladar al animal silvestre.
+                </li>
+                <li>
+                  Mantén alejadas a las personas; no le des comida, agua ni
+                  medicamentos.
+                </li>
+                <li>
+                  Reporta la ubicación a las autoridades ambientales o a un
+                  centro de rescate.
+                </li>
               </ul>
               <Link to="/crear-cuenta">
                 Crea tu cuenta para dar seguimiento →
@@ -279,37 +301,36 @@ export default function Home() {
 
         <section className="content-section tactics-section" id="tacticas">
           <div className="section-heading">
-            <span className="eyebrow">Cuidado y protección</span>
-            <h2>Primeros auxilios para animales domésticos</h2>
+            <span className="eyebrow">Fauna silvestre</span>
+            <h2>Cómo ayudar sin ponerla en riesgo</h2>
             <p>
-              Consejos prácticos y seguros para brindar asistencia inicial a
-              perros, gatos y otras mascotas mientras reciben atención
-              veterinaria.
+              La manipulación puede lastimar al animal y ponerte en peligro.
+              Mantén distancia y deja la atención en manos de personal
+              especializado.
             </p>
           </div>
           <div className="info-grid">
             <article className="info-card">
-              <h3>Control de hemorragias</h3>
+              <h3>Observa desde una distancia segura</h3>
               <p>
-                Ante una hemorragia leve, aplica presión suave con una gasa o
-                paño limpio solo si el animal está tranquilo y hacerlo resulta
-                seguro para ti.
+                No lo toques ni intentes capturarlo, incluso si parece herido.
+                Algunos animales reaccionan por miedo y pueden lastimarse o
+                lastimarte.
               </p>
             </article>
             <article className="info-card">
-              <h3>Manejo y traslado seguro</h3>
+              <h3>Reduce el estrés y los riesgos</h3>
               <p>
-                Evita movimientos bruscos y no intentes inmovilizar fracturas
-                por tu cuenta. Colócalo con cuidado en una superficie firme o
-                transportadora.
+                Mantén alejadas a las personas. No le ofrezcas alimentos, agua
+                ni medicamentos; espera indicaciones del equipo de rescate.
               </p>
             </article>
             <article className="info-card">
-              <h3>Calma y entorno</h3>
+              <h3>Contacta a especialistas</h3>
               <p>
-                Reduce el ruido, evita aglomeraciones a su alrededor y no le
-                forces a consumir agua o alimentos hasta que sea revisado por un
-                veterinario.
+                Comparte la ubicación exacta, una descripción del animal y su
+                estado con las autoridades ambientales o un centro de atención
+                de fauna silvestre.
               </p>
             </article>
           </div>
@@ -317,9 +338,12 @@ export default function Home() {
 
         <section className="content-section adoption-section" id="adopciones">
           <div className="section-heading">
-            <span className="eyebrow">Adopción responsable</span>
-            <h2>Un hogar cambia dos vidas</h2>
-            <p>Conoce algunos animales que esperan una familia comprometida.</p>
+            <span className="eyebrow">Rehabilitación responsable</span>
+            <h2>Recuperarse para volver a la naturaleza</h2>
+            <p>
+              Conoce ejemplos de fauna silvestre que requiere valoración y
+              atención especializada antes de regresar a su hábitat.
+            </p>
           </div>
           <div className="animal-grid">
             {animals.map((animal) => (
@@ -328,19 +352,19 @@ export default function Home() {
                   {animal.emoji}
                 </div>
                 <div className="animal-card__body">
-                  <span className="animal-label">En busca de hogar</span>
+                  <span className="animal-label">En rehabilitación</span>
                   <h3>{animal.name}</h3>
                   <p>{animal.detail}</p>
                   <Link className="button button--outline" to="/login">
-                    Consultar adopción
+                    Reportar un caso
                   </Link>
                 </div>
               </article>
             ))}
           </div>
           <p className="adoption-note">
-            Para adoptar se requiere identificación vigente, un espacio seguro y
-            compromiso de cuidado y seguimiento veterinario.
+            La valoración, rehabilitación y liberación de fauna silvestre deben
+            quedar a cargo de equipos autorizados.
           </p>
         </section>
 
@@ -349,9 +373,9 @@ export default function Home() {
             <span className="eyebrow">Ayuda solidaria</span>
             <h2>Cada aporte se convierte en cuidado.</h2>
             <p>
-              Apoya alimentos, atención veterinaria y espacios seguros en los
-              refugios. Esta página registra donaciones de forma local como
-              demostración; no procesa pagos reales.
+              Apoya la atención veterinaria especializada, la rehabilitación y
+              la protección de hábitats. Esta página registra donaciones de
+              forma local como demostración; no procesa pagos reales.
             </p>
           </div>
           <form className="donation-form" onSubmit={submitDonation}>

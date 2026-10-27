@@ -1,17 +1,22 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { DEMO_ACCOUNTS, rolePath, signIn, ROLE_LABELS } from '../servicios/auth';
-import '../assets/styles/login.css';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  DEMO_ACCOUNTS,
+  rolePath,
+  signIn,
+  ROLE_LABELS,
+} from "../servicios/auth";
+import "../assets/styles/login.css";
 
 export default function Login() {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   function handleSubmit(event) {
     event.preventDefault();
-    setError('');
+    setError("");
     try {
       const session = signIn(identifier, password);
       navigate(rolePath(session.rol), { replace: true });
@@ -23,12 +28,20 @@ export default function Login() {
   return (
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="login-title">
-        <Link className="auth-brand" to="/">🐾 <span>Anima Nova</span></Link>
+        <Link className="auth-brand" to="/">
+          🐾 <span>Anima Nova</span>
+        </Link>
         <p className="auth-eyebrow">Tu comunidad de cuidado animal</p>
         <h1 id="login-title">Iniciar sesión</h1>
-        <p className="auth-subtitle">Ingresa para continuar a tu espacio de trabajo.</p>
+        <p className="auth-subtitle">
+          Ingresa para continuar a tu espacio de trabajo.
+        </p>
 
-        {error && <p className="form-message form-message--error" role="alert">{error}</p>}
+        {error && (
+          <p className="form-message form-message--error" role="alert">
+            {error}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <label htmlFor="identifier">Correo o nombre de usuario</label>
@@ -55,14 +68,17 @@ export default function Login() {
             required
           />
 
-          <button className="button button--primary auth-submit" type="submit">Ingresar</button>
+          <button className="button button--primary auth-submit" type="submit">
+            Ingresar
+          </button>
         </form>
 
         <aside className="demo-credentials">
           <strong>Cuentas de prueba por rol</strong>
           {DEMO_ACCOUNTS.map((account) => (
             <span key={account.email}>
-              {ROLE_LABELS[account.rol || 'admin']}: {account.email} / {account.password}
+              {ROLE_LABELS[account.rol || "admin"]}: {account.email} /{" "}
+              {account.password}
             </span>
           ))}
         </aside>
@@ -70,7 +86,9 @@ export default function Login() {
         <p className="auth-switch">
           ¿Aún no tienes cuenta? <Link to="/crear-cuenta">Crear cuenta</Link>
         </p>
-        <Link className="auth-back" to="/">← Volver al inicio público</Link>
+        <Link className="auth-back" to="/">
+          ← Volver al inicio público
+        </Link>
       </section>
     </main>
   );
