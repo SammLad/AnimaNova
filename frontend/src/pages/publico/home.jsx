@@ -1,4 +1,5 @@
-﻿import { useState } from 'react';
+﻿import React from "react";
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import deerImage from '../../assets/deer.png';
 import deerIcon from '../../assets/icowhite.png';
@@ -312,7 +313,7 @@ export default function Home() {
               <span className="severity severity--low">Preventivo</span>
               <h3>Fauna silvestre</h3>
               <p>
-                Nunca lo captures ni lo lleves a tu hogar. Aleja a personas y animales domésticos para evitar estrés o ataque.
+                Nunca lo captures ni lo lleves a tu hogar. Aleja a personas y mascotas para evitar estrés o ataque.
               </p>
             </article>
           </div>

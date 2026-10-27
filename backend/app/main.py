@@ -12,15 +12,15 @@ from pydantic import BaseModel, Field
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BACKEND_DIR / "data"
 DATABASE_PATH = DATA_DIR / "animanova.db"
-PetSpecies = Literal["perro", "gato", "conejo", "ave_domestica", "pez", "otro_domestico"]
-ActorRole = Literal["usuario", "rescatista", "refugio", "adoptante"]
-AnimalStatus = Literal["en_cuidado", "perdido", "encontrado", "en_adopcion", "adoptado"]
-ReportType = Literal["perdido", "encontrado", "ayuda", "adopcion"]
+PetSpecies = Literal["ave_silvestre", "mamifero_silvestre", "reptil", "anfibio", "pez", "otro"]
+ActorRole = Literal["usuario", "rescatista", "refugio"]
+AnimalStatus = Literal["reportado", "en_atencion", "trasladado", "ingresado", "recuperando"]
+ReportType = Literal["alerta", "rescate", "traslado", "ingreso"]
 ReportStatus = Literal["pendiente", "en_revision", "atendido", "cerrado"]
 
 app = FastAPI(
-    title="AnimaNova API",
-    description="Gestión de animales domésticos, sus cuidadores y reportes comunitarios.",
+    title="WildCare API",
+    description="Gestión de fauna silvestre en riesgo, rescate, tránsito y seguimiento por refugios.",
     version="0.2.0",
 )
 
@@ -43,21 +43,21 @@ class ActorCreate(BaseModel):
 
 class AnimalCreate(BaseModel):
     nombre: str | None = Field(default=None, max_length=80)
-    especie: PetSpecies
+    especie: str = Field(min_length=2, max_length=80)
     raza: str | None = Field(default=None, max_length=80)
     sexo: Literal["macho", "hembra", "desconocido"] = "desconocido"
     edad_aproximada: str | None = Field(default=None, max_length=50)
     descripcion: str = Field(min_length=10, max_length=1000)
     vacunado: bool | None = None
     esterilizado: bool | None = None
-    estado: AnimalStatus = "en_cuidado"
+    estado: AnimalStatus = "reportado"
     responsable_id: int | None = Field(default=None, gt=0)
     imagen_url: str | None = Field(default=None, max_length=500)
 
 
 class ReportCreate(BaseModel):
     tipo: ReportType
-    especie: PetSpecies
+    especie: str = Field(min_length=2, max_length=80)
     descripcion: str = Field(min_length=10, max_length=1000)
     ubicacion: str = Field(min_length=3, max_length=200)
     animal_id: int | None = Field(default=None, gt=0)
@@ -107,7 +107,7 @@ def initialize_database() -> None:
             CREATE TABLE IF NOT EXISTS actores (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
-                rol TEXT NOT NULL CHECK (rol IN ('usuario', 'rescatista', 'refugio', 'adoptante')),
+                rol TEXT NOT NULL CHECK (rol IN ('usuario', 'rescatista', 'refugio')),
                 correo TEXT NOT NULL UNIQUE,
                 telefono TEXT,
                 organizacion TEXT,
@@ -121,9 +121,7 @@ def initialize_database() -> None:
             CREATE TABLE IF NOT EXISTS animales (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT,
-                especie TEXT NOT NULL CHECK (especie IN (
-                    'perro', 'gato', 'conejo', 'ave_domestica', 'pez', 'otro_domestico'
-                )),
+                especie TEXT NOT NULL,
                 raza TEXT,
                 sexo TEXT NOT NULL,
                 edad_aproximada TEXT,
@@ -142,9 +140,7 @@ def initialize_database() -> None:
             CREATE TABLE IF NOT EXISTS reportes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tipo TEXT NOT NULL,
-                especie TEXT NOT NULL CHECK (especie IN (
-                    'perro', 'gato', 'conejo', 'ave_domestica', 'pez', 'otro_domestico'
-                )),
+                especie TEXT NOT NULL,
                 descripcion TEXT NOT NULL,
                 ubicacion TEXT NOT NULL,
                 animal_id INTEGER REFERENCES animales(id),
@@ -168,7 +164,7 @@ initialize_database()
 @app.get("/", tags=["inicio"])
 def read_root() -> dict[str, str]:
     return {
-        "mensaje": "API de AnimaNova para animales domésticos",
+        "mensaje": "API de WildCare para fauna silvestre en riesgo",
         "documentacion": "/docs",
     }
 
@@ -215,7 +211,7 @@ def list_actors(rol: ActorRole | None = None) -> list[dict[str, object]]:
     return [row_to_dict(actor) for actor in actors]
 
 
-@app.post("/api/animales", status_code=201, tags=["animales domésticos"])
+@app.post("/api/animales", status_code=201, tags=["animales silvestres"])
 def create_animal(animal: AnimalCreate) -> dict[str, object]:
     created_at = datetime.now(timezone.utc).isoformat()
     try:
@@ -250,7 +246,7 @@ def create_animal(animal: AnimalCreate) -> dict[str, object]:
     return row_to_dict(saved_animal)
 
 
-@app.get("/api/animales", tags=["animales domésticos"])
+@app.get("/api/animales", tags=["animales silvestres"])
 def list_animals(
     especie: PetSpecies | None = None,
     estado: AnimalStatus | None = None,
@@ -271,7 +267,7 @@ def list_animals(
     return [row_to_dict(animal) for animal in animals]
 
 
-@app.get("/api/animales/{animal_id}", tags=["animales domésticos"])
+@app.get("/api/animales/{animal_id}", tags=["animales silvestres"])
 def get_animal(animal_id: int) -> dict[str, object]:
     with get_connection() as connection:
         animal = connection.execute(
@@ -282,7 +278,7 @@ def get_animal(animal_id: int) -> dict[str, object]:
     return row_to_dict(animal)
 
 
-@app.patch("/api/animales/{animal_id}/estado", tags=["animales domésticos"])
+@app.patch("/api/animales/{animal_id}/estado", tags=["animales silvestres"])
 def update_animal_status(
     animal_id: int, update: AnimalStatusUpdate
 ) -> dict[str, object]:
@@ -299,7 +295,7 @@ def update_animal_status(
     return row_to_dict(animal)
 
 
-@app.post("/api/reportes", status_code=201, tags=["reportes domésticos"])
+@app.post("/api/reportes", status_code=201, tags=["reportes de fauna silvestre"])
 def create_report(report: ReportCreate) -> dict[str, object]:
     created_at = datetime.now(timezone.utc).isoformat()
     with get_connection() as connection:
@@ -342,7 +338,7 @@ def create_report(report: ReportCreate) -> dict[str, object]:
     return row_to_dict(saved_report)
 
 
-@app.get("/api/reportes", tags=["reportes domésticos"])
+@app.get("/api/reportes", tags=["reportes de fauna silvestre"])
 def list_reports(
     tipo: ReportType | None = None,
     estado: ReportStatus | None = None,
@@ -363,7 +359,7 @@ def list_reports(
     return [row_to_dict(report) for report in reports]
 
 
-@app.get("/api/reportes/{report_id}", tags=["reportes domésticos"])
+@app.get("/api/reportes/{report_id}", tags=["reportes de fauna silvestre"])
 def get_report(report_id: int) -> dict[str, object]:
     with get_connection() as connection:
         report = connection.execute(
@@ -374,7 +370,7 @@ def get_report(report_id: int) -> dict[str, object]:
     return row_to_dict(report)
 
 
-@app.patch("/api/reportes/{report_id}/estado", tags=["reportes domésticos"])
+@app.patch("/api/reportes/{report_id}/estado", tags=["reportes de fauna silvestre"])
 def update_report_status(
     report_id: int, update: ReportStatusUpdate
 ) -> dict[str, object]:

@@ -1,6 +1,6 @@
 # Backend de AnimaNova
 
-API para organizar la atención de animales domésticos: perfiles de animales, actores de la comunidad y reportes de pérdida, hallazgo, ayuda y adopción. Está construida con FastAPI y SQLite; la base de datos se crea automáticamente en `data/animanova.db` al iniciar la API.
+API para organizar la atención de fauna silvestre en riesgo: perfiles de animales, actores de la comunidad y reportes de rescate, traslado, ingreso y seguimiento médico. Está construida con FastAPI y SQLite; la base de datos se crea automáticamente en `data/animanova.db` al iniciar la API.
 
 ## Requisitos
 
@@ -33,20 +33,20 @@ Abre `http://127.0.0.1:8000/docs` para probar los endpoints interactivos. La API
 
 ## Entidades
 
-- **Actor:** persona u organización que participa. Roles: `usuario`, `rescatista`, `refugio` y `adoptante`. Tiene nombre, correo único y datos de contacto/ubicación opcionales.
-- **Animal doméstico:** perfil con especie permitida (`perro`, `gato`, `conejo`, `ave_domestica`, `pez`, `otro_domestico`), descripción, estado, responsable opcional y datos básicos de cuidado. La API valida las especies del catálogo doméstico.
-- **Reporte:** aviso de pérdida, hallazgo, solicitud de ayuda o adopción. Registra especie doméstica, descripción, ubicación, contacto y, cuando se conoce, el animal y el actor que reporta.
+- **Actor:** persona u organización que participa. Roles: `usuario`, `rescatista` y `refugio`. Tiene nombre, correo único y datos de contacto/ubicación opcionales.
+- **Animal silvestre:** perfil con especie, descripción, estado, responsable opcional y datos básicos de cuidado. El flujo se centra en rescate, traslado y recuperación en refugio.
+- **Reporte:** alerta de fauna silvestre en riesgo o en proceso de rescate. Registra especie, descripción, ubicación, contacto y, cuando se conoce, el animal y el actor que reporta.
 
 ## Endpoints
 
 - `GET /`: comprobar que la API responde.
-- `POST /api/actores` y `GET /api/actores`: registrar y listar usuarios, rescatistas, refugios y adoptantes. Se puede filtrar con `?rol=rescatista`.
-- `POST /api/animales`: crear el perfil de un animal doméstico.
-- `GET /api/animales`: listar perfiles; filtros opcionales `?especie=perro` y `?estado=en_adopcion`.
+- `POST /api/actores` y `GET /api/actores`: registrar y listar usuarios, rescatistas y refugios. Se puede filtrar con `?rol=rescatista`.
+- `POST /api/animales`: crear el perfil de un animal silvestre o en tránsito.
+- `GET /api/animales`: listar perfiles; filtros opcionales `?especie=ave_silvestre` y `?estado=ingresado`.
 - `GET /api/animales/{animal_id}`: consultar un perfil.
-- `PATCH /api/animales/{animal_id}/estado`: cambiar su situación de cuidado o adopción.
-- `POST /api/reportes`: crear un reporte doméstico; `animal_id` y `reportante_id` son opcionales.
-- `GET /api/reportes`: listar reportes; filtros opcionales `?tipo=perdido` y `?estado=pendiente`.
+- `PATCH /api/animales/{animal_id}/estado`: actualizar la situación del animal en el flujo de rescate y recuperación.
+- `POST /api/reportes`: crear un reporte de fauna silvestre en riesgo; `animal_id` y `reportante_id` son opcionales.
+- `GET /api/reportes`: listar reportes; filtros opcionales `?tipo=alerta` y `?estado=pendiente`.
 - `GET /api/reportes/{report_id}`: consultar un reporte.
 - `PATCH /api/reportes/{report_id}/estado`: cambiar su estado a `pendiente`, `en_revision`, `atendido` o `cerrado`.
 

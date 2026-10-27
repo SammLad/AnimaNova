@@ -1,4 +1,5 @@
-﻿import { useMemo, useState } from 'react';
+﻿import React from "react";
+import { useMemo, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getReports, getSession, getUsers, ROLE_LABELS, normalizeRole, rolePath, saveReports, signOut } from '../../servicios/auth';
 import '../../assets/styles/dashboard.css';

@@ -20,7 +20,7 @@ async function listarAnimales() {
     throw new Error(`La API respondió con el estado ${respuesta.status}`);
   }
 
-  console.log("Animales domésticos:", await respuesta.json());
+  console.log("Animales silvestres en seguimiento:", await respuesta.json());
 }
 
 async function ejemplo() {
@@ -33,21 +33,21 @@ async function ejemplo() {
   });
 
   const animal = await enviar("/animales", {
-    nombre: "Luna",
-    especie: "perro",
-    raza: "Criollo",
+    nombre: "Loro",
+    especie: "ave_silvestre",
+    raza: "No aplica",
     sexo: "hembra",
-    edad_aproximada: "2 años",
-    descripcion: "Perra doméstica encontrada y actualmente bajo cuidado.",
+    edad_aproximada: "1 año",
+    descripcion: "Ave silvestre encontrada en una zona urbana y bajo cuidado temporal.",
     vacunado: false,
     esterilizado: false,
     responsable_id: rescatista.id,
   });
 
   const reporte = await enviar("/reportes", {
-    tipo: "encontrado",
+    tipo: "alerta",
     especie: animal.especie,
-    descripcion: "Luna fue encontrada cerca del parque del barrio.",
+    descripcion: "Se reportó a un ave silvestre en la zona del parque con signos de desorientación.",
     ubicacion: "Parque principal, Bogotá",
     animal_id: animal.id,
     reportante_id: rescatista.id,
@@ -58,4 +58,4 @@ async function ejemplo() {
   await listarAnimales();
 }
 
-ejemplo().catch((error) => console.error("Error al comunicarse con AnimaNova:", error));
+ejemplo().catch((error) => console.error("Error al comunicarse con WildCare:", error));

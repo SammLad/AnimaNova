@@ -27,7 +27,6 @@ export function normalizeRole(role) {
   if (!role) return role;
   const normalized = String(role).trim().toLowerCase();
   if (normalized === 'ciudadano') return 'usuario';
-  if (normalized === 'zoologico') return 'refugio';
   return normalized;
 }
 

@@ -1,19 +1,21 @@
-/* ==========================================================================
-WildCare - Home Stylesheet (Warm Orange Aesthetic)
-========================================================================== */
+/* Legacy public-page theme. The React app uses home.css and index.css. */
 
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Nunito:wght@400;600;700&display=swap');
 
 :root {
-  --primary-color: #e67e22;
-  --primary-hover: #d35400;
-  --brand-orange: #d35400;
-  --bg-color: #fff9f5;
-  --navbar-bg: #fcdcd0;
-  --card-bg: #fff;
-  --card-tint: #fbeee6;
-  --text-main: #5c3a21;
-  --text-muted: #8c6d53;
+  --primary-color: #bd673e;
+  --primary-hover: #9e5234;
+  --brand-orange: #bd673e;
+  --bg-color: #faf6ef;
+  --navbar-bg: #f6e8eb;
+  --card-bg: #fffdf9;
+  --card-tint: #f2e9dd;
+  --text-main: #493a32;
+  --text-muted: #81766a;
+  --earth: #624a3d;
+  --green: #4d7054;
+  --pink: #a85f70;
+  --line: #e8dfd3;
   --border-radius: 1.5rem;
 }
 
@@ -50,7 +52,7 @@ body {
 .logo-flower {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #f39c12, #e67e22);
+  background: linear-gradient(135deg, #d9955d, #bd673e);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -72,14 +74,14 @@ nav a:hover {
 .card-white {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: 0 10px 25px rgba(230, 126, 34, 0.08);
-  border: 1px solid rgba(230, 126, 34, 0.1);
+  box-shadow: 0 10px 25px rgba(98, 74, 61, 0.07);
+  border: 1px solid var(--line);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-white:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 30px rgba(230, 126, 34, 0.12);
+  box-shadow: 0 15px 30px rgba(98, 74, 61, 0.12);
 }
 
 .section-gap {
@@ -92,7 +94,7 @@ h2,
 h3,
 h4,
 .text-success {
-  color: var(--brand-orange) !important;
+  color: var(--earth) !important;
 }
 
 .text-muted {
@@ -131,7 +133,7 @@ h4,
 
 /* Footer */
 footer {
-  background-color: #2c1d11;
-  color: #d1c2b4;
+  background-color: var(--earth);
+  color: #f1e7db;
   font-size: 0.9rem;
 }

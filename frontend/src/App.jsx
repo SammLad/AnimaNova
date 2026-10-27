@@ -1,4 +1,5 @@
-﻿import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+﻿import React from "react";
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import Home from './pages/publico/home';
 import AdminDashboard from './pages/admin/inicio';
 import Login from './sections/login';
