@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { registerCitizen } from "../servicios/auth";
-import "../assets/styles/login.css";
+﻿import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerCitizen } from '../servicios/auth';
+import '../assets/styles/login.css';
 
 export default function Register() {
   const [form, setForm] = useState({
-    nombre: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    nombre: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   function updateField(event) {
@@ -22,27 +22,18 @@ export default function Register() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setError("");
+    setError('');
     if (form.password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres.");
+      setError('La contraseña debe tener al menos 8 caracteres.');
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setError("Las contraseñas no coinciden.");
+      setError('Las contraseñas no coinciden.');
       return;
     }
     try {
       registerCitizen(form);
-<<<<<<< HEAD
       navigate('/', { replace: true, state: { notice: '¡Cuenta creada! Ya puedes iniciar sesión como usuario.' } });
-=======
-      navigate("/", {
-        replace: true,
-        state: {
-          notice: "¡Cuenta creada! Ya puedes iniciar sesión como ciudadano.",
-        },
-      });
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
     } catch (registrationError) {
       setError(registrationError.message);
     }
@@ -52,18 +43,12 @@ export default function Register() {
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="register-title">
         <Link className="auth-brand" to="/">
-          🐾 <span>Anima Nova</span>
+          <span>🐾</span>
+          <span>Anima Nova</span>
         </Link>
         <p className="auth-eyebrow">Únete a la comunidad</p>
         <h1 id="register-title">Crear cuenta</h1>
-<<<<<<< HEAD
         <p className="auth-subtitle">Regístrate para apoyar rescates y reportar animales silvestres en peligro.</p>
-=======
-        <p className="auth-subtitle">
-          Regístrate para apoyar el rescate, la rehabilitación y la conservación
-          de fauna silvestre.
-        </p>
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
 
         {error && (
           <p className="form-message form-message--error" role="alert">
@@ -73,49 +58,16 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="auth-form">
           <label htmlFor="nombre">Nombre completo</label>
-          <input
-            id="nombre"
-            name="nombre"
-            value={form.nombre}
-            onChange={updateField}
-            autoComplete="name"
-            required
-          />
+          <input id="nombre" name="nombre" value={form.nombre} onChange={updateField} autoComplete="name" required />
 
           <label htmlFor="email">Correo electrónico</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={updateField}
-            autoComplete="email"
-            required
-          />
+          <input id="email" name="email" type="email" value={form.email} onChange={updateField} autoComplete="email" required />
 
           <label htmlFor="new-password">Contraseña</label>
-          <input
-            id="new-password"
-            name="password"
-            type="password"
-            minLength="8"
-            value={form.password}
-            onChange={updateField}
-            autoComplete="new-password"
-            required
-          />
+          <input id="new-password" name="password" type="password" minLength="8" value={form.password} onChange={updateField} autoComplete="new-password" required />
 
           <label htmlFor="confirm-password">Confirmar contraseña</label>
-          <input
-            id="confirm-password"
-            name="confirmPassword"
-            type="password"
-            minLength="8"
-            value={form.confirmPassword}
-            onChange={updateField}
-            autoComplete="new-password"
-            required
-          />
+          <input id="confirm-password" name="confirmPassword" type="password" minLength="8" value={form.confirmPassword} onChange={updateField} autoComplete="new-password" required />
 
           <button className="button button--primary auth-submit" type="submit">
             Crear cuenta

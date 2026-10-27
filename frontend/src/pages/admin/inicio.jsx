@@ -1,24 +1,6 @@
-<<<<<<< HEAD
 ﻿import { useMemo, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-=======
-import { useMemo, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-import {
-  getReports,
-  getSession,
-  getUsers,
-<<<<<<< HEAD
-  normalizeRole,
-=======
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-  ROLE_LABELS,
-  rolePath,
-  saveReports,
-  signOut,
-<<<<<<< HEAD
-} from '../../servicios/auth';
+import { getReports, getSession, getUsers, ROLE_LABELS, normalizeRole, rolePath, saveReports, signOut } from '../../servicios/auth';
 import '../../assets/styles/dashboard.css';
 
 const PORTALS = {
@@ -49,68 +31,16 @@ const PORTALS = {
     navigation: ['Resumen', 'Animales recibidos', 'Historial médico'],
     intro: 'Gestión del refugio',
     actions: ['Revisa animales remitidos', 'Actualiza estado de recuperación', 'Registra evolución médica'],
-=======
-} from "../../servicios/auth";
-import "../../assets/styles/dashboard.css";
-
-const PORTALS = {
-  admin: {
-    title: "Centro de administración",
-    subtitle: "Gestiona la comunidad y coordina la respuesta de Anima Nova.",
-    navigation: ["Resumen", "Reportes", "Usuarios"],
-    intro: "Panel general",
-    actions: [
-      "Supervisar casos activos",
-      "Revisar cuentas de la comunidad",
-      "Mantener actualizada la red de atención",
-    ],
-  },
-  ciudadano: {
-    title: "Mi espacio ciudadano",
-    subtitle: "Consulta tus reportes y ayuda a proteger la fauna silvestre.",
-    navigation: ["Resumen", "Mis reportes", "Conservación"],
-    intro: "Participación ciudadana",
-    actions: [
-      "Reporta animales en riesgo",
-      "Da seguimiento a los casos",
-      "Conoce cómo apoyar la rehabilitación de fauna silvestre",
-    ],
-  },
-  rescatista: {
-    title: "Centro de rescate",
-    subtitle:
-      "Organiza la atención de alertas y actualiza el estado de cada rescate.",
-    navigation: ["Resumen", "Alertas", "Guía de campo"],
-    intro: "Coordinación de rescates",
-    actions: [
-      "Revisa reportes pendientes",
-      "Coordina la atención en campo",
-      "Registra cuándo un animal está a salvo",
-    ],
-  },
-  refugio: {
-    title: "Centro de rehabilitación",
-    subtitle:
-      "Coordina la atención, rehabilitación y liberación responsable de fauna silvestre.",
-    navigation: ["Resumen", "Casos recibidos", "Rehabilitación"],
-    intro: "Gestión de rehabilitación",
-    actions: [
-      "Revisa animales remitidos",
-      "Actualiza el estado de atención",
-      "Coordina la rehabilitación y liberación autorizada",
-    ],
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
   },
 };
 
 function formatDate(date) {
-  return date || "Fecha no registrada";
+  return date || 'Fecha no registrada';
 }
 
 function createReport(form, reporter) {
   return {
     id: `REP-${Date.now().toString().slice(-6)}`,
-<<<<<<< HEAD
     especie: form.get('especie').toString().trim(),
     ubicacion: form.get('ubicacion').toString().trim(),
     descripcion: form.get('descripcion').toString().trim(),
@@ -119,13 +49,6 @@ function createReport(form, reporter) {
     fotos: form.getAll('fotos').map((file) => file.name).filter(Boolean),
     estado: 'Pendiente',
     fecha: new Date().toLocaleDateString('es-CO'),
-=======
-    especie: form.get("especie").toString().trim(),
-    ubicacion: form.get("ubicacion").toString().trim(),
-    descripcion: form.get("descripcion").toString().trim(),
-    estado: "Reportado",
-    fecha: new Date().toLocaleDateString("es-CO"),
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
     reportadoPor: reporter,
   };
 }
@@ -136,38 +59,22 @@ export default function AdminDashboard() {
   const session = getSession();
   const role = normalizeRole(routeRole);
   const config = PORTALS[role];
-  const [activeTab, setActiveTab] = useState(
-    config?.navigation[0] || "Resumen",
-  );
+  const [activeTab, setActiveTab] = useState(config?.navigation[0] || 'Resumen');
   const [reports, setReports] = useState(getReports);
   const [users] = useState(getUsers);
-  const [reportMessage, setReportMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState('');
 
   const pendingCount = useMemo(
-<<<<<<< HEAD
     () => reports.filter((report) => ['Pendiente', 'Reportado'].includes(report.estado)).length,
-=======
-    () => reports.filter((report) => report.estado === "Reportado").length,
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
     [reports],
   );
 
   if (!config) return <Navigate to="/" replace />;
   if (!session) return <Navigate to="/login" replace />;
-<<<<<<< HEAD
   if (normalizeRole(session.rol) !== role) return <Navigate to={rolePath(session.rol)} replace />;
 
   function updateReport(reportId, status) {
     const updated = reports.map((report) => (report.id === reportId ? { ...report, estado: status } : report));
-=======
-  if (session.rol !== role)
-    return <Navigate to={rolePath(session.rol)} replace />;
-
-  function updateReport(reportId, status) {
-    const updated = reports.map((report) =>
-      report.id === reportId ? { ...report, estado: status } : report,
-    );
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
     saveReports(updated);
     setReports(updated);
     setReportMessage(`El caso ${reportId} se actualizó: ${status}.`);
@@ -186,19 +93,10 @@ export default function AdminDashboard() {
 
   function handleSignOut() {
     signOut();
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   }
 
-<<<<<<< HEAD
-  const roleReports = role === 'usuario'
-    ? reports.filter((report) => report.reportadoPor === session.nombre)
-    : reports;
-=======
-  const roleReports =
-    role === "ciudadano"
-      ? reports.filter((report) => report.reportadoPor === session.nombre)
-      : reports;
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
+  const roleReports = role === 'usuario' ? reports.filter((report) => report.reportadoPor === session.nombre) : reports;
 
   return (
     <div className="dashboard-shell">
@@ -211,681 +109,152 @@ export default function AdminDashboard() {
         <nav className="dashboard-nav" aria-label="Secciones del panel">
           {config.navigation.map((item, index) => (
             <button
-              className={
-                activeTab === item
-                  ? "dashboard-nav__item is-active"
-                  : "dashboard-nav__item"
-              }
+              className={activeTab === item ? 'dashboard-nav__item is-active' : 'dashboard-nav__item'}
               key={item}
               onClick={() => setActiveTab(item)}
               type="button"
             >
-              <span className="nav-icon">{["⌂", "◉", "✦"][index % 3]}</span>
+              <span className="nav-icon">{['⌂', '◉', '✦'][index % 3]}</span>
               {item}
             </button>
           ))}
         </nav>
-        <div className="sidebar-bottom">
-          <Link to="/">← Sitio público</Link>
-          <button type="button" onClick={handleSignOut}>
-            Cerrar sesión
-          </button>
-        </div>
+
+        <button className="button button--quiet dashboard-signout" type="button" onClick={handleSignOut}>
+          Cerrar sesión
+        </button>
       </aside>
 
       <main className="dashboard-main">
         <header className="dashboard-topbar">
           <div>
-            <span className="dashboard-overline">{ROLE_LABELS[role]}</span>
-            <h1>{activeTab}</h1>
+            <p className="eyebrow">{config.intro}</p>
+            <h1>{config.title}</h1>
           </div>
-          <div className="dashboard-profile">
-            <span className="profile-avatar">
-              {session.nombre.slice(0, 1).toUpperCase()}
-            </span>
-            <span>
-              <strong>{session.nombre}</strong>
-              <small>{ROLE_LABELS[role]}</small>
-            </span>
+          <div className="user-badge">
+            <span>{session.nombre}</span>
+            <small>{ROLE_LABELS[session.rol] || session.rol}</small>
           </div>
         </header>
 
-        <section className="dashboard-content">
-          <div className="dashboard-welcome">
-<<<<<<< HEAD
-            <div><span className="eyebrow">ANIMA NOVA · {config.intro}</span><h2>{config.title}</h2><p>{config.subtitle}</p></div>
-            {role === 'usuario' && <a href="#nuevo-reporte" className="button button--primary">+ Nuevo reporte</a>}
-=======
+        <section className="dashboard-summary">
+          <div className="summary-card">
+            <span>Total de reportes</span>
+            <strong>{reports.length}</strong>
+          </div>
+          <div className="summary-card">
+            <span>Pendientes</span>
+            <strong>{pendingCount}</strong>
+          </div>
+          <div className="summary-card">
+            <span>Usuarios activos</span>
+            <strong>{users.filter((user) => user.estado !== 'suspendido').length}</strong>
+          </div>
+        </section>
+
+        <section className="dashboard-panel">
+          <div className="panel-header">
             <div>
-              <span className="eyebrow">ANIMA NOVA · {config.intro}</span>
-              <h2>{config.title}</h2>
-              <p>{config.subtitle}</p>
+              <p className="eyebrow">{config.title}</p>
+              <h2>{config.subtitle}</h2>
             </div>
-            {role === "ciudadano" && (
-              <a href="#nuevo-reporte" className="button button--primary">
-                + Nuevo reporte
-              </a>
-            )}
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
           </div>
 
-          {role === "admin" && activeTab === "Resumen" && (
-            <>
-              <div className="metric-grid">
-<<<<<<< HEAD
-                <Metric label="Reportes activos" value={reports.length} note="Casos registrados" icon="◉" />
-                <Metric label="Pendientes" value={pendingCount} note="Requieren asignación" icon="⌖" />
-                <Metric label="Cuentas" value={users.length} note="En la comunidad" icon="♙" />
-                <Metric label="Roles de gestión" value="4" note="Público y equipos" icon="✦" />
-=======
-                <Metric
-                  label="Reportes activos"
-                  value={reports.length}
-                  note="Casos registrados"
-                  icon="◉"
-                />
-                <Metric
-                  label="Pendientes"
-                  value={pendingCount}
-                  note="Requieren asignación"
-                  icon="⌖"
-                />
-                <Metric
-                  label="Cuentas"
-                  value={users.length}
-                  note="En la comunidad"
-                  icon="♙"
-                />
-                <Metric
-                  label="Roles de gestión"
-                  value="5"
-                  note="Público y equipos"
-                  icon="✦"
-                />
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-              </div>
-              <div className="dashboard-grid">
-                <section className="dashboard-card dashboard-card--wide">
-                  <div className="card-heading">
-                    <div>
-                      <h3>Casos recientes</h3>
-                      <p>Actividad de la red de rescate</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="text-button"
-                      onClick={() => setActiveTab("Reportes")}
-                    >
-                      Ver reportes →
-                    </button>
-                  </div>
-                  <ReportTable
-                    reports={reports.slice(0, 5)}
-                    onUpdate={updateReport}
-                    role={role}
-                  />
-                </section>
-                <section className="dashboard-card">
-                  <div className="card-heading">
-                    <div>
-                      <h3>Accesos rápidos</h3>
-                      <p>Herramientas de administración</p>
-                    </div>
-                  </div>
-                  <ul className="quick-list">
-                    {config.actions.map((action) => (
-                      <li key={action}>
-                        <span>✓</span>
-                        {action}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-            </>
+          <div className="action-row">
+            {config.actions.map((action) => (
+              <span className="action-pill" key={action}>{action}</span>
+            ))}
+          </div>
+
+          {reportMessage && (
+            <p className="form-message form-message--success" role="status">
+              {reportMessage}
+            </p>
           )}
 
-          {role === "admin" && activeTab === "Reportes" && (
-            <section className="dashboard-card">
-<<<<<<< HEAD
-              <div className="card-heading"><div><h3>Reportes de la comunidad</h3><p>Actualiza el estado para que los equipos mantengan la información al día.</p></div><span className="count-badge">{reports.length} casos</span></div>
-              <ReportTable reports={reports} onUpdate={updateReport} role={role} />
-              {reportMessage && <p className="dashboard-feedback" role="status">{reportMessage}</p>}
-=======
-              <div className="card-heading">
-                <div>
-                  <h3>Reportes de la comunidad</h3>
-                  <p>
-                    Actualiza su estado para que los equipos mantengan la
-                    información al día.
-                  </p>
-                </div>
-                <span className="count-badge">{reports.length} casos</span>
-              </div>
-              <ReportTable
-                reports={reports}
-                onUpdate={updateReport}
-                role={role}
-              />
-              {reportMessage && (
-                <p className="dashboard-feedback" role="status">
-                  {reportMessage}
-                </p>
-              )}
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-            </section>
+          {activeTab === 'Resumen' && (
+            <div className="dashboard-grid">
+              <article className="panel-card">
+                <h3>Casos recientes</h3>
+                <ul className="stack-list">
+                  {roleReports.slice(0, 4).map((report) => (
+                    <li key={report.id}>
+                      <strong>{report.id}</strong>
+                      <span>{report.especie}</span>
+                      <small>{report.estado} · {formatDate(report.fecha)}</small>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className="panel-card">
+                <h3>Estado del sistema</h3>
+                <p>La red WildCare está funcionando con reportes activos, coordinación de rescatistas y atención del refugio.</p>
+              </article>
+            </div>
           )}
 
-          {role === "admin" && activeTab === "Usuarios" && (
-            <section className="dashboard-card">
-<<<<<<< HEAD
-              <div className="card-heading"><div><h3>Usuarios registrados</h3><p>Personas y equipos que colaboran en la plataforma.</p></div><span className="count-badge">{users.length} cuentas</span></div>
-              <div className="user-list">
-                {users.map((user) => (
-                  <div className="user-row" key={user.id}>
-                    <span className="profile-avatar">{user.nombre.slice(0, 1).toUpperCase()}</span>
-                    <div className="user-row__info"><strong>{user.nombre}</strong><span>{user.email}</span></div>
-                    <span className="role-chip">{ROLE_LABELS[user.rol] || user.rol}</span>
-                    <span className="user-state">{user.estado || 'activo'}</span>
-=======
-              <div className="card-heading">
-                <div>
-                  <h3>Usuarios registrados</h3>
-                  <p>Ciudadanos y equipos que colaboran en la plataforma.</p>
-                </div>
-                <span className="count-badge">{users.length} cuentas</span>
-              </div>
-              <div className="user-list">
-                {users.map((user) => (
-                  <div className="user-row" key={user.id}>
-                    <span className="profile-avatar">
-                      {user.nombre.slice(0, 1).toUpperCase()}
-                    </span>
-                    <div className="user-row__info">
-                      <strong>{user.nombre}</strong>
-                      <span>{user.email}</span>
-                    </div>
-                    <span className="role-chip">
-                      {ROLE_LABELS[user.rol] || user.rol}
-                    </span>
-                    <span className="user-state">
-                      {user.estado || "activo"}
-                    </span>
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
+          {activeTab === 'Reportes' && (
+            <div className="reports-panel">
+              {reports.map((report) => (
+                <article className="report-row" key={report.id}>
+                  <div>
+                    <strong>{report.id}</strong>
+                    <p>{report.especie} · {report.ubicacion}</p>
                   </div>
-                ))}
-              </div>
-            </section>
+                  <span>{report.estado}</span>
+                  <button type="button" className="button button--quiet" onClick={() => updateReport(report.id, 'En atención')}>
+                    En atención
+                  </button>
+                  <button type="button" className="button button--quiet" onClick={() => updateReport(report.id, 'Resuelto')}>
+                    Resuelto
+                  </button>
+                </article>
+              ))}
+            </div>
           )}
 
-          {role !== "admin" && (
-            <div className="role-dashboard">
-              {activeTab === config.navigation[0] && (
-                <>
-                  <div className="metric-grid metric-grid--compact">
-<<<<<<< HEAD
-                    <Metric label={role === 'usuario' ? 'Mis reportes' : 'Casos en la red'} value={roleReports.length} note={role === 'usuario' ? 'Enviados desde tu cuenta' : 'Para seguimiento'} icon="◉" />
-                    <Metric label="Pendientes" value={roleReports.filter((report) => ['Pendiente', 'Reportado'].includes(report.estado)).length} note="Por atender" icon="⌖" />
-                    <Metric label="Estado de cuenta" value="Activo" note="Acceso habilitado" icon="✓" />
-                  </div>
-                  <div className="dashboard-grid">
-                    <section className="dashboard-card dashboard-card--wide">
-                      <div className="card-heading"><div><h3>{role === 'usuario' ? 'Seguimiento de reportes' : 'Alertas y casos asignados'}</h3><p>{role === 'usuario' ? 'Consulta el estado de tus reportes.' : `Gestión para ${ROLE_LABELS[role].toLowerCase()}.`}</p></div><span className="count-badge">{roleReports.length} casos</span></div>
-                      {roleReports.length ? <ReportTable reports={roleReports} onUpdate={updateReport} role={role} /> : <p className="empty-state">Todavía no tienes reportes asociados a tu cuenta.</p>}
-                    </section>
-                    <section className="dashboard-card">
-                      <div className="card-heading"><div><h3>{config.intro}</h3><p>Herramientas disponibles</p></div></div>
-                      <ul className="quick-list">{config.actions.map((action) => <li key={action}><span>✓</span>{action}</li>)}</ul>
-                      {role === 'rescatista' && <div className="field-guide"><strong>Seguridad en campo</strong><p>Evalúa los riesgos antes de acercarte. En fauna silvestre, mantén distancia y solicita apoyo especializado si el animal está herido o nervioso.</p></div>}
-                      {role === 'refugio' && <div className="field-guide"><strong>Ingreso de fauna</strong><p>Revisa la procedencia, la documentación del caso y la fecha de entrega antes de registrar la admisión formal del animal.</p></div>}
-                      {role === 'usuario' && <a className="text-button" href="/#reportar">Registrar un nuevo caso →</a>}
-                    </section>
-                  </div>
-                  {role === 'usuario' && <CitizenReportForm onSubmit={submitCitizenReport} message={reportMessage} />}
-                </>
-              )}
+          {activeTab === 'Mis reportes' && (
+            <form className="panel-card report-form" onSubmit={submitCitizenReport}>
+              <label htmlFor="especie">Especie</label>
+              <input id="especie" name="especie" required />
 
-              {role !== 'usuario' && activeTab === config.navigation[1] && (
-=======
-                    <Metric
-                      label={
-                        role === "ciudadano"
-                          ? "Mis reportes"
-                          : "Casos en la red"
-                      }
-                      value={roleReports.length}
-                      note={
-                        role === "ciudadano"
-                          ? "Enviados desde tu cuenta"
-                          : "Para seguimiento"
-                      }
-                      icon="◉"
-                    />
-                    <Metric
-                      label="Pendientes"
-                      value={
-                        roleReports.filter(
-                          (report) => report.estado === "Reportado",
-                        ).length
-                      }
-                      note="Por atender"
-                      icon="⌖"
-                    />
-                    <Metric
-                      label="Estado de cuenta"
-                      value="Activo"
-                      note="Acceso habilitado"
-                      icon="✓"
-                    />
-                  </div>
-                  <div className="dashboard-grid">
-                    <section className="dashboard-card dashboard-card--wide">
-                      <div className="card-heading">
-                        <div>
-                          <h3>
-                            {role === "ciudadano"
-                              ? "Seguimiento de reportes"
-                              : "Alertas y casos asignados"}
-                          </h3>
-                          <p>
-                            {role === "ciudadano"
-                              ? "Consulta el estado de tus reportes."
-                              : `Gestión para ${ROLE_LABELS[role].toLowerCase()}.`}
-                          </p>
-                        </div>
-                        <span className="count-badge">
-                          {roleReports.length} casos
-                        </span>
-                      </div>
-                      {roleReports.length ? (
-                        <ReportTable
-                          reports={roleReports}
-                          onUpdate={updateReport}
-                          role={role}
-                        />
-                      ) : (
-                        <p className="empty-state">
-                          Todavía no tienes reportes asociados a tu cuenta.
-                        </p>
-                      )}
-                    </section>
-                    <section className="dashboard-card">
-                      <div className="card-heading">
-                        <div>
-                          <h3>{config.intro}</h3>
-                          <p>Herramientas disponibles</p>
-                        </div>
-                      </div>
-                      <ul className="quick-list">
-                        {config.actions.map((action) => (
-                          <li key={action}>
-                            <span>✓</span>
-                            {action}
-                          </li>
-                        ))}
-                      </ul>
-                      {role === "rescatista" && (
-                        <div className="field-guide">
-                          <strong>Seguridad en campo</strong>
-                          <p>
-                            Prioriza la seguridad del equipo y del animal. No
-                            manipules fauna silvestre sin capacitación y equipo
-                            adecuado.
-                          </p>
-                        </div>
-                      )}
-                      {role === "refugio" && (
-                        <div className="field-guide">
-                          <strong>Atención de fauna silvestre</strong>
-                          <p>
-                            Prioriza la valoración por especialistas y evita
-                            mantener ejemplares silvestres fuera de programas
-                            autorizados de rehabilitación.
-                          </p>
-                        </div>
-                      )}
-                      {role === "ciudadano" && (
-                        <a
-                          className="text-button citizen-adoption-link"
-                          href="/#adopciones"
-                        >
-                          Conocer la rehabilitación de fauna →
-                        </a>
-                      )}
-                    </section>
-                  </div>
-                  {role === "ciudadano" && (
-                    <CitizenReportForm
-                      onSubmit={submitCitizenReport}
-                      message={reportMessage}
-                    />
-                  )}
-                </>
-              )}
+              <label htmlFor="ubicacion">Ubicación</label>
+              <input id="ubicacion" name="ubicacion" required />
 
-              {role !== "ciudadano" && activeTab === config.navigation[1] && (
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-                <section className="dashboard-card">
-                  <div className="card-heading">
-                    <div>
-                      <h3>{config.navigation[1]}</h3>
-                      <p>Casos disponibles para tu equipo de atención.</p>
-                    </div>
-                    <span className="count-badge">
-                      {roleReports.length} casos
-                    </span>
-                  </div>
-                  <ReportTable
-                    reports={roleReports}
-                    onUpdate={updateReport}
-                    role={role}
-                  />
-                </section>
-              )}
+              <label htmlFor="coordenadas">Coordenadas</label>
+              <input id="coordenadas" name="coordenadas" />
 
-<<<<<<< HEAD
-              {role === 'usuario' && activeTab === 'Mis reportes' && (
-                <section className="dashboard-card">
-                  <div className="card-heading"><div><h3>Reportes enviados desde tu cuenta</h3><p>Consulta el estado actual de cada caso.</p></div><span className="count-badge">{roleReports.length} casos</span></div>
-                  {roleReports.length ? <ReportTable reports={roleReports} onUpdate={updateReport} role={role} /> : <p className="empty-state">Aún no has enviado reportes desde esta cuenta.</p>}
-                  <CitizenReportForm onSubmit={submitCitizenReport} message={reportMessage} />
-                </section>
-              )}
+              <label htmlFor="emergencia">Nivel de emergencia</label>
+              <select id="emergencia" name="emergencia" defaultValue="Media">
+                <option value="Baja">Baja</option>
+                <option value="Media">Media</option>
+                <option value="Alta">Alta</option>
+                <option value="Crítica">Crítica</option>
+              </select>
 
-              {(role === 'rescatista' && activeTab === 'Guía de campo') || (role === 'usuario' && activeTab === 'Guía de auxilio') || (role === 'refugio' && activeTab === 'Historial médico') ? (
-                <section className="dashboard-card guidance-panel">
-                  <div className="card-heading"><div><h3>{activeTab}</h3><p>Recursos de apoyo para la atención responsable.</p></div></div>
-                  <ul className="quick-list">{config.actions.map((action) => <li key={action}><span>✓</span>{action}</li>)}</ul>
-                  {role === 'rescatista' && <div className="field-guide"><strong>Seguridad en campo</strong><p>Evalúa los riesgos antes de acercarte. En fauna silvestre, mantén distancia y solicita apoyo especializado si el animal está herido o nervioso.</p></div>}
-                  {role === 'usuario' && <div className="field-guide"><strong>Guía rápida</strong><p>Documenta la especie, la ubicación, el nivel de emergencia y cualquier signo de lesión. Evita tocar o alimentar al animal sin indicar la forma correcta.</p></div>}
-                  {role === 'refugio' && <div className="field-guide"><strong>Historial del animal</strong><p>Registra observaciones de ingreso, evolución y tratamiento. La información debe corresponder a un traslado confirmado y no a un reporte aislado.</p></div>}
-=======
-              {role === "ciudadano" && activeTab === "Mis reportes" && (
-                <section className="dashboard-card">
-                  <div className="card-heading">
-                    <div>
-                      <h3>Reportes enviados desde tu cuenta</h3>
-                      <p>
-                        Consulta el estado actual de cada caso que registraste.
-                      </p>
-                    </div>
-                    <span className="count-badge">
-                      {roleReports.length} casos
-                    </span>
-                  </div>
-                  {roleReports.length ? (
-                    <ReportTable
-                      reports={roleReports}
-                      onUpdate={updateReport}
-                      role={role}
-                    />
-                  ) : (
-                    <p className="empty-state">
-                      Aún no has enviado reportes desde esta cuenta.
-                    </p>
-                  )}
-                  <CitizenReportForm
-                    onSubmit={submitCitizenReport}
-                    message={reportMessage}
-                  />
-                </section>
-              )}
+              <label htmlFor="descripcion">Descripción</label>
+              <textarea id="descripcion" name="descripcion" rows="3" required />
 
-              {(activeTab === "Guía de campo" ||
-                (role === "refugio" && activeTab === "Rehabilitación")) && (
-                <section className="dashboard-card guidance-panel">
-                  <div className="card-heading">
-                    <div>
-                      <h3>{activeTab}</h3>
-                      <p>
-                        Recursos de apoyo para el trabajo de tu organización.
-                      </p>
-                    </div>
-                  </div>
-                  <ul className="quick-list">
-                    {config.actions.map((action) => (
-                      <li key={action}>
-                        <span>✓</span>
-                        {action}
-                      </li>
-                    ))}
-                  </ul>
-                  {role === "rescatista" && (
-                    <div className="field-guide">
-                      <strong>Seguridad en campo</strong>
-                      <p>
-                        Evalúa los riesgos antes de acercarte. En fauna
-                        silvestre, mantén distancia y solicita apoyo
-                        especializado. Registra la ubicación y el estado del
-                        caso.
-                      </p>
-                    </div>
-                  )}
-                  {role === "refugio" && (
-                    <div className="field-guide">
-                      <strong>Rehabilitación y liberación</strong>
-                      <p>
-                        Registra la valoración veterinaria, coordina la
-                        rehabilitación con personal autorizado y planifica la
-                        liberación solo cuando sea segura.
-                      </p>
-                    </div>
-                  )}
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-                </section>
-              ) : null}
+              <button className="button button--primary" type="submit">Guardar reporte</button>
+            </form>
+          )}
 
-<<<<<<< HEAD
-              {role !== 'usuario' && reportMessage && <p className="dashboard-feedback" role="status">{reportMessage}</p>}
-=======
-              {role === "ciudadano" && activeTab === "Conservación" && (
-                <section className="dashboard-card guidance-panel">
-                  <div className="card-heading">
-                    <div>
-                      <h3>Fauna silvestre en rehabilitación</h3>
-                      <p>
-                        Apoya la recuperación de fauna silvestre y su retorno
-                        seguro a un hábitat adecuado.
-                      </p>
-                    </div>
+          {activeTab === 'Usuarios' && (
+            <div className="users-panel">
+              {users.map((user) => (
+                <article className="user-row" key={user.id || user.email}>
+                  <div>
+                    <strong>{user.nombre}</strong>
+                    <small>{user.email}</small>
                   </div>
-                  <ul className="quick-list">
-                    <li>
-                      <span>🦝</span>Zarigüeya · En valoración veterinaria
-                    </li>
-                    <li>
-                      <span>🦜</span>Guacamaya · En proceso de rehabilitación
-                    </li>
-                    <li>
-                      <span>🦎</span>Iguana · En observación especializada
-                    </li>
-                  </ul>
-                  <Link
-                    className="text-button citizen-adoption-link"
-                    to="/#adopciones"
-                  >
-                    Conocer la rehabilitación →
-                  </Link>
-                </section>
-              )}
-              {role !== "ciudadano" && reportMessage && (
-                <p className="dashboard-feedback" role="status">
-                  {reportMessage}
-                </p>
-              )}
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
+                  <span>{ROLE_LABELS[user.rol] || user.rol}</span>
+                </article>
+              ))}
             </div>
           )}
         </section>
       </main>
-    </div>
-  );
-}
-
-function Metric({ label, value, note, icon }) {
-  return (
-    <article className="metric-card">
-      <span className="metric-icon">{icon}</span>
-      <span className="metric-label">{label}</span>
-      <strong>{value}</strong>
-      <small>{note}</small>
-    </article>
-  );
-}
-
-function CitizenReportForm({ onSubmit, message }) {
-  return (
-    <section className="dashboard-card citizen-report-card" id="nuevo-reporte">
-      <div className="card-heading">
-        <div>
-          <h3>Enviar un reporte</h3>
-          <p>
-            Describe la situación para que la red pueda organizar la atención.
-          </p>
-        </div>
-      </div>
-      <form className="dashboard-report-form" onSubmit={onSubmit}>
-<<<<<<< HEAD
-        <label>Especie o tipo<input name="especie" required placeholder="Ej. Loro, venado, felino" /></label>
-        <label>Ubicación<input name="ubicacion" required placeholder="Dirección o referencia" /></label>
-        <label>Coordenadas<input name="coordenadas" placeholder="Ej. 4.7110,-74.0721" /></label>
-        <label>Emergencia<select name="emergencia" defaultValue="Media"><option value="Baja">Baja</option><option value="Media">Media</option><option value="Alta">Alta</option><option value="Crítica">Crítica</option></select></label>
-        <label className="form-full">Descripción<textarea name="descripcion" required rows="3" placeholder="¿Qué le sucede al animal?" /></label>
-        <label className="form-full">Fotografías<input type="file" name="fotos" accept="image/*" multiple /></label>
-        <button type="submit" className="button button--primary">Enviar reporte</button>
-=======
-        <label>
-          Especie o tipo
-          <input
-            name="especie"
-            required
-            placeholder="Ej. Ave silvestre, zarigüeya, iguana"
-          />
-        </label>
-        <label>
-          Ubicación
-          <input
-            name="ubicacion"
-            required
-            placeholder="Dirección o referencia"
-          />
-        </label>
-        <label className="form-full">
-          Descripción
-          <textarea
-            name="descripcion"
-            required
-            rows="3"
-            placeholder="¿Qué le sucede al animal?"
-          />
-        </label>
-        <button type="submit" className="button button--primary">
-          Enviar reporte
-        </button>
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-      </form>
-      {message && (
-        <p className="dashboard-feedback" role="status">
-          {message}
-        </p>
-      )}
-    </section>
-  );
-}
-
-function ReportTable({ reports, onUpdate, role }) {
-  const nextAction = {
-<<<<<<< HEAD
-    admin: { label: 'Validar caso', status: 'En revisión' },
-    rescatista: { label: 'Atender', status: 'En atención' },
-    refugio: { label: 'Confirmar ingreso', status: 'Ingresado al refugio' },
-    usuario: null,
-=======
-    admin: { label: "Validar caso", status: "En atención" },
-    rescatista: { label: "Atender", status: "En atención" },
-    refugio: { label: "Recibir caso", status: "En refugio" },
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-  }[role];
-
-  return (
-    <div className="report-table-wrap">
-      <table className="report-table">
-        <thead>
-          <tr>
-            <th>Caso</th>
-            <th>Animal</th>
-            <th>Ubicación</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-            {nextAction && <th>Acción</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {reports.map((report) => (
-            <tr key={report.id}>
-<<<<<<< HEAD
-              <td><strong>{report.id}</strong><small>{report.descripcion}</small></td>
-              <td>{report.especie}</td>
-              <td>{report.ubicacion}</td>
-              <td><span className={`case-status ${report.estado.toLowerCase().replaceAll(' ', '-')}`}>{report.estado}</span></td>
-              <td>{formatDate(report.fecha)}</td>
-              {nextAction && (
-                <td>
-                  {report.estado === 'Pendiente' || report.estado === 'Reportado' ? (
-                    <button className="table-action" type="button" onClick={() => onUpdate(report.id, nextAction.status)}>{nextAction.label}</button>
-                  ) : role === 'rescatista' && report.estado === 'En atención' ? (
-                    <button className="table-action" type="button" onClick={() => onUpdate(report.id, 'En traslado')}>Marcar traslado</button>
-=======
-              <td>
-                <strong>{report.id}</strong>
-                <small>{report.descripcion}</small>
-              </td>
-              <td>{report.especie}</td>
-              <td>{report.ubicacion}</td>
-              <td>
-                <span
-                  className={`case-status ${report.estado.toLowerCase().replaceAll(" ", "-")}`}
-                >
-                  {report.estado}
-                </span>
-              </td>
-              <td>{formatDate(report.fecha)}</td>
-              {nextAction && (
-                <td>
-                  {report.estado === "Reportado" ? (
-                    <button
-                      className="table-action"
-                      type="button"
-                      onClick={() => onUpdate(report.id, nextAction.status)}
-                    >
-                      {nextAction.label}
-                    </button>
-                  ) : role === "rescatista" &&
-                    report.estado === "En atención" ? (
-                    <button
-                      className="table-action"
-                      type="button"
-                      onClick={() => onUpdate(report.id, "Rescatado")}
-                    >
-                      Marcar rescatado
-                    </button>
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
-                  ) : (
-                    <span className="table-done">Actualizado</span>
-                  )}
-                </td>
-              )}
-            </tr>
-          ))}
-          {reports.length === 0 && (
-            <tr>
-              <td colSpan={nextAction ? 6 : 5} className="empty-row">
-                No hay casos para mostrar.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
     </div>
   );
 }

@@ -1,30 +1,18 @@
-<<<<<<< HEAD
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DEMO_ACCOUNTS, rolePath, signIn, ROLE_LABELS } from '../servicios/auth';
+import deerIcon from '../assets/deer.png';
+import { DEMO_ACCOUNTS, ROLE_LABELS, rolePath, signIn } from '../servicios/auth';
 import '../assets/styles/login.css';
-import deerIcon from '../assets/deer.png'
-=======
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  DEMO_ACCOUNTS,
-  rolePath,
-  signIn,
-  ROLE_LABELS,
-} from "../servicios/auth";
-import "../assets/styles/login.css";
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
 
 export default function Login() {
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   function handleSubmit(event) {
     event.preventDefault();
-    setError("");
+    setError('');
     try {
       const session = signIn(identifier, password);
       navigate(rolePath(session.rol), { replace: true });
@@ -37,17 +25,12 @@ export default function Login() {
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="login-title">
         <Link className="auth-brand" to="/">
-<<<<<<< HEAD
-          <img className="brand__mark" src={deerIcon} alt="" /><span>Anima Nova</span></Link>
-=======
-          🐾 <span>Anima Nova</span>
+          <img className="brand__mark" src={deerIcon} alt="" />
+          <span>Anima Nova</span>
         </Link>
->>>>>>> d0cefb837bac01eb79b9c4106afb662d0e6dd803
         <p className="auth-eyebrow">Tu comunidad de cuidado animal</p>
         <h1 id="login-title">Iniciar sesión</h1>
-        <p className="auth-subtitle">
-          Ingresa para continuar a tu espacio de trabajo.
-        </p>
+        <p className="auth-subtitle">Ingresa para continuar a tu espacio de trabajo.</p>
 
         {error && (
           <p className="form-message form-message--error" role="alert">
@@ -89,8 +72,7 @@ export default function Login() {
           <strong>Cuentas de prueba por rol</strong>
           {DEMO_ACCOUNTS.map((account) => (
             <span key={account.email}>
-              {ROLE_LABELS[account.rol || "admin"]}: {account.email} /{" "}
-              {account.password}
+              {ROLE_LABELS[account.rol || 'admin']}: {account.email} / {account.password}
             </span>
           ))}
         </aside>
